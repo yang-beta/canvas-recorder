@@ -68,7 +68,6 @@ button {
   pointer-events:none;
 }
 
-
 .brand-story-final-copy {
   position:absolute;
   left:50%;
@@ -88,7 +87,6 @@ button {
   letter-spacing:.2rem;
   text-align:center;
   pointer-events:none;
-  transition: opacity 0.6s ease;
 }
 
 .brand-story-final-mask {
@@ -102,7 +100,6 @@ button {
   transform:translateY(118%);
   opacity:0;
   will-change:transform,opacity;
-  transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
 .brand-story-final-line.is-brand-color {
@@ -179,7 +176,6 @@ button {
   opacity:0;
   pointer-events:none;
   will-change:transform,opacity;
-  transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
 .brand-story-final-bracket::before,
@@ -226,7 +222,7 @@ button {
   left:58.5%;
   bottom:22.5%;
   width:clamp(26px,2.35vw,44px);
-  z-index:7;
+  z-index:7; /* 調整高於背景模糊遮罩(z-index:6) */
   pointer-events:none;
   opacity:0;
 }
@@ -286,8 +282,6 @@ button {
   opacity:.58;
 }
 
-
-/* 最終 Slogan 自動柔焦：［ ］框內保持清晰，框外兩層景深。 */
 #brandStorySection::before,
 #brandStorySection::after {
   content:"";
@@ -360,15 +354,10 @@ button {
     </span>
   </div>
 
- <div class="brand-story-person-wrap" aria-hidden="true">
-  <svg class="brand-story-person" viewBox="0 0 24 60" fill="#111111" xmlns="http://www.w3.org/2000/svg">
-    <!-- 頭部 -->
-    <circle cx="12" cy="7" r="4.5" />
-    <!-- 身體與四肢剪影 -->
-    <path d="M7 15C7 13.5 8.5 13 12 13C15.5 13 17 13.5 17 15L16 28C16 29 15 30 14.5 30L14.5 57C14.5 58.5 13.5 59 12.5 59C11.5 59 11 58.5 11 57L11 38L10 38L10 57C10 58.5 9 59 8 59C7 59 6.5 58.5 6.5 57L6.5 30C6 30 5 29 5 28L7 15Z" />
-  </svg>
-  <div class="brand-story-person-shadow"></div>
-</div>
+  <div class="brand-story-person-wrap" aria-hidden="true">
+    <img class="brand-story-person" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAABQCAYAAAAOYsW+AAAACXBIWXMAAAsTAAALEwEAmpwYAAAGoGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4xLWMwMDIgNzkuYTFjZDEyZjQxLCAyMDI0LzExLzA4LTE2OjA5OjIwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjYuMiAoTWFjaW50b3NoKSIgeG1wOkNyZWF0YWRhdGU9IjIwMjYtMDgtMTNUMjE6Mjc6MjQrMDg6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDI2LTA4LTEzVDIxOjMwOjQ3KzA4OjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDI2LTA4LTEzVDIxOjMwOjQ3KzA4OjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo3Y2NmZWQ4NS1lMDY5LTQ0NzEtYjI0Ny1hNjYwZDNmNjVlYzIiIHhtcE1NOkRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDpiYjNiOTg0ZS05MzU2LTY1NDYtOTYyNy1jZmJjZDFhYTMxMTEiIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmNThkNmM0NS0yYzcyLTRlNzMtYWZkNy05MWQxYTlmZjhiNGMiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOmY1OGQ2YzQ1LTJjNzItNGU3My1hZmQ3LTkxZDFhOWZmOGI0YyIgc3RFdnQ6d2hlbj0iMjAyNi0wOC0xM1QyMToyNzoyNCswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjIgKE1hY2ludG9zaCkiLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjUyYzQzMWZkLTIxZjgtNDMzOS1hMDNkLTMyMzZkMGMzZmZjZCIgc3RFdnQ6d2hlbj0iMjAyNi0wOC0xM1QyMTozMDoxMiswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjIgKE1hY2ludG9zaCkiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjdjY2ZlZDg1LWUwNjktNDQ3MS1iMjQ3LWE2NjBkM2Y2NWVjMiIgc3RFdnQ6d2hlbj0iMjAyNi0wOC0xM1QyMTozMDo0NyswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjIgKE1hY2ludG9zaCkiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+InifsgAABGtJREFUaN61mmlIVUEUx18RRVsVhdUXI4giC9uwoKAiivYPqRG2olnRphHt0kortGoUFST6QYuIQmghtayQMtujRSxawDZtL/JL3dc5NYPHw7n3LXdm4A/vnbl3fnfmzj0z59wbcBwnEImCwSAqAVQGWqL+R6xAFOD8YONSAuoQMTjCE3YSoEN+fwV1sQVuD/pGoA6DL7QF7s96y+HbbYFxKOs9erzIFrgT6KcHOMMWuE+Iod5tc1Zf8+jxEJvgXkKvsWy0/RzPdQG/Ae0AtbUBrghxj7GcxmP/ebgG9+oLvM8DyuHTmF+PGhwXBpTCX5oY6kGguxGCg+qcpGjA3cijEw7Q7QLQtw8LF9wa9NYHlMOfhgteZQDK4WPCAd8wBPV0pwEHn7sGxYLxtwXwrVA9TjY4zHy4u3uBdxmGUvAkL3CZRfBmNzA6+M8WwBr+xA083sL95b2Ol8C7LUEpeJkEvm0RrOHnORjd5CdLjxH/34uCE4UI4TXohY9Fogh0R4g6RjoEvEG4ugJQrg9wKihTAO+hPb4kHJCq9lHRgjOFJwXLIw1uBfrIKmtATVQkGC0YezZBAOMa3S6gfCivLFEhyw8f4Cvq4quE0RyktzccvALUw8AOBNvfIoDH872yLu18ejJd+oKGC+1P5B4LS6W60hkGwHpF+sjA49A4jxmz1MHTDYB1BJnNGCloXM+MOs5d4nPRCKrURUDFVnRUK9BYzsAJ6uAsA+B81VZ3EltjKUVjHjGcIotGtoHt7WXSXgGfXF1B35XhrHCgH/BV0l4hAY/Wxmpi7KlsvdltiBSa55LG+AWKQWMMPcHBaK/hhNk+wDkEPIzNo3i918JyBHQAdIickOoDvJ+0gzmwC6ATqm4gDbpxuEfAWVNIj1N8gLcS8BxQGuikqg/wGLhYRxXKPtYD/CdM58G3zvP5nquneoRoQrSfC1jHwKVuWSD4kUg6EKNGNCPcwLyjR1LtKGiNR/ppsN9UxAOXxteRycfr8DbE+gUXuDS+gC15tO49qIVf8BqXxnFVa+ZSd99EnmuKS+PpoOYuifODJsBjXcDLVb0E3mQC3McFvEM9LnVCXbWplGKl0Pg2Bf4g1OWaAhcJw5npMuuDKgVpBHzOA7xPuM85psDPBLCeXCsFcKHNHo9UdWeEoT4e+k1b4zyXKDjwJgc7/x0ID/ikJdFXj18IPZ6l6t4LdWmmwFVCr3Q+448UlJkCVwhgDH2aChOrToW+RsB5AvgYqLMAvm3yZchiAVAkhLJY9poEjxIA5WpLU8u2rhNMguMEMO63Jgux7wCTYNx7fxHiaO5Y7tl44VXJIA9BF5mtygZ4j/BtwHJmK7MBTmaQHBa8h9zSRgvOZcNay95NYRlqA7xNmNkPSHKd5k8CRlYntUKhe3zF4DdZiuG6rffHxQRSQ9ZiXepVEG4cvIlAnoMOMzAOexsb4NMMlM5GYamNoW4JesfASeTbgY62vhFYK/jl1VF/3RTBwTPVNuexEi74U6MF/Um/o+DKPdeMAAAAABJRU5ErkJggg==" alt="">
+    <div class="brand-story-person-shadow"></div>
+  </div>
 </section>
 
 <script>
@@ -555,7 +544,7 @@ button {
     }
   }
 
-  /* 補上缺少的 updateFocusBounds 函式：計算［ ］框的外圍尺寸供模糊遮罩使用 */
+  /* 聚焦範圍計算 */
   function updateFocusBounds() {
     const copyEl = document.querySelector(".brand-story-final-copy");
     if (!copyEl) return;
@@ -631,7 +620,7 @@ button {
       });
 
     setState(finalCopy, {opacity:"1"});
-    setState(personWrap, {opacity:"0"});
+    setState(personWrap, {opacity:"0"}); /* 重置人物透明度 */
 
     const promoDate = document.getElementById("brandStoryPromoDate");
     const promoTitle = document.getElementById("brandStoryPromoTitle");
@@ -664,28 +653,26 @@ button {
     const final1 = document.getElementById("brandStoryFinal1");
     const final2 = document.getElementById("brandStoryFinal2");
     const brackets = [...document.querySelectorAll(".brand-story-final-bracket")];
+    const personWrap = document.querySelector(".brand-story-person-wrap");
 
-    /* 人物照原設定淡入 */
+    /* 人物淡入顯現並保持 */
     animateTo(
-      document.querySelector(".brand-story-person-wrap"),
+      personWrap,
       [{opacity:0},{opacity:1}],
-      {duration:1200,easing:"ease-out"}
+      {duration:1200,easing:"ease-out",fill:"forwards"}
     );
 
     await sleep(2500);
     if (thisRun !== runId) return;
 
-    /* Line 1 出現 */
     await reveal("brandStoryFinal1",860);
     if (thisRun !== runId) return;
     await sleep(1500);
 
-    /* Line 2 出現 */
     await reveal("brandStoryFinal2",860);
     if (thisRun !== runId) return;
     await sleep(1000);
 
-    /* ［ ］出現 */
     await Promise.all(
       brackets.map(el =>
         animateTo(
@@ -716,10 +703,10 @@ button {
     await sleep(2000);
     if (thisRun !== runId) return;
 
-    /* 重要修正：清除前段 Web Animations 的殘留 fill:forwards，使後續隱藏動畫順利運行 */
+    /* 清除前段動畫鎖定 */
     [final1, final2, ...brackets].forEach(clearElementAnimations);
 
-    /* 漸隱清除 ［ ］ 與兩行文字 */
+    /* 清除 ［ ］ 與兩行文字 */
     final1.style.opacity = "0";
     final1.style.transform = "translateY(-35%)";
     final2.style.opacity = "0";
@@ -740,16 +727,14 @@ button {
     promoDate.classList.remove("is-leaving");
     promoDate.classList.add("is-visible");
 
-    /* 完整顯示 1.5 秒（加上進場動態 860ms） */
     await sleep(860 + 1500);
 
-    /* 9月1日 離場清除 */
     promoDate.classList.remove("is-visible");
     promoDate.classList.add("is-leaving");
     await sleep(600);
     promoDate.classList.remove("is-leaving");
 
-    /* 同位置以相同進場效果出現品牌色「拾洸記憶展」並停留 */
+    /* 出現品牌色「拾洸記憶展」並停留 */
     promoTitle.classList.remove("is-leaving");
     promoTitle.classList.add("is-visible");
   }
