@@ -112,11 +112,9 @@ button {
   left:50%;
   top:47%;
   transform:translate(-50%,-50%);
-  z-index:8;
+  z-index:10;
   width:min(86vw,980px);
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  height:2.2em;
   color:#ff6b6b;
   font-family:"Noto Serif TC",serif;
   font-size:var(--font-display);
@@ -125,20 +123,48 @@ button {
   letter-spacing:.2rem;
   text-align:center;
   pointer-events:none;
-  opacity:0;
 }
 
-.brand-story-promo-mask {
-  display:block;
+.brand-story-promo-item {
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
   overflow:hidden;
   padding:0 2px;
+  opacity:0;
+  visibility:hidden;
 }
 
 .brand-story-promo-line {
   display:inline-block;
   transform:translateY(118%);
   opacity:0;
+  transition:transform .86s cubic-bezier(.22,1,.36,1), opacity .86s cubic-bezier(.22,1,.36,1);
   will-change:transform,opacity;
+}
+
+.brand-story-promo-item.is-visible {
+  opacity:1;
+  visibility:visible;
+}
+
+.brand-story-promo-item.is-visible .brand-story-promo-line {
+  transform:translateY(0%);
+  opacity:1;
+}
+
+.brand-story-promo-item.is-leaving {
+  opacity:1;
+  visibility:visible;
+}
+
+.brand-story-promo-item.is-leaving .brand-story-promo-line {
+  transform:translateY(-35%);
+  opacity:0;
+  transition-duration:.6s;
+  transition-timing-function:ease-in-out;
 }
 
 .brand-story-final-bracket {
@@ -323,8 +349,11 @@ button {
   </div>
 
   <div class="brand-story-promo-copy" id="brandStoryPromo" aria-live="polite">
-    <span class="brand-story-promo-mask">
-      <span class="brand-story-promo-line" id="brandStoryPromoLine"></span>
+    <span class="brand-story-promo-mask brand-story-promo-item" id="brandStoryPromoDate">
+      <span class="brand-story-promo-line">9月1日</span>
+    </span>
+    <span class="brand-story-promo-mask brand-story-promo-item" id="brandStoryPromoTitle">
+      <span class="brand-story-promo-line">拾洸記憶展</span>
     </span>
   </div>
 
@@ -572,15 +601,12 @@ button {
       {opacity:"0"}
     );
 
-    const promo = document.getElementById("brandStoryPromo");
-    const promoLine = document.getElementById("brandStoryPromoLine");
-    if (promo && promoLine) {
-      clearElementAnimations(promo);
-      clearElementAnimations(promoLine);
-      promoLine.textContent = "";
-      setState(promo,{opacity:"0"});
-      setState(promoLine,{transform:"translateY(118%)",opacity:"0"});
-    }
+    const promoDate = document.getElementById("brandStoryPromoDate");
+    const promoTitle = document.getElementById("brandStoryPromoTitle");
+    [promoDate,promoTitle].forEach(el => {
+      if (!el) return;
+      el.classList.remove("is-visible","is-leaving");
+    });
   }
 
   function clearElementAnimations(el) {
@@ -671,69 +697,38 @@ button {
     await sleep(2000);
     if (thisRun !== runId) return;
 
-    /* 聚焦完整結束後，清除 ［ ］ 與兩行結語。 */
-    await Promise.all([
-      hideElement(final1,600),
-      hideElement(final2,600),
-      ...brackets.map(el =>
-        animateTo(
-          el,
-          [
-            {transform:"translateY(-50%) scaleY(1)",opacity:1},
-            {transform:"translateY(-50%) scaleY(.78)",opacity:0}
-          ],
-          {duration:600,easing:"ease-in-out"}
-        )
-      )
-    ]);
-    if (thisRun !== runId) return;
+    /* 聚焦完整結束後：後段不再依賴 Web Animations API 的 finished。 */
+    final1.style.opacity = "0";
+    final1.style.transform = "translateY(-35%)";
+    final2.style.opacity = "0";
+    final2.style.transform = "translateY(-35%)";
+    brackets.forEach(el => {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(-50%) scaleY(.78)";
+    });
 
-    /* 聚焦結束後，改用獨立活動文字層，避免沿用結語 DOM 的動畫狀態。 */
-    const promo = document.getElementById("brandStoryPromo");
-    const promoLine = document.getElementById("brandStoryPromoLine");
+    await sleep(600);
 
-    setState(document.querySelector(".brand-story-final-copy"),{opacity:"0"});
-    clearElementAnimations(promo);
-    clearElementAnimations(promoLine);
-    setState(promo,{opacity:"1"});
+    const finalCopy = document.querySelector(".brand-story-final-copy");
+    const promoDate = document.getElementById("brandStoryPromoDate");
+    const promoTitle = document.getElementById("brandStoryPromoTitle");
+    finalCopy.style.opacity = "0";
 
-    promoLine.textContent = "9月1日";
-    setState(promoLine,{transform:"translateY(118%)",opacity:"0"});
-    await animateTo(
-      promoLine,
-      [
-        {transform:"translateY(118%)",opacity:0},
-        {transform:"translateY(0%)",opacity:1}
-      ],
-      {duration:860,easing:"cubic-bezier(.22,1,.36,1)"}
-    );
-    if (thisRun !== runId) return;
+    /* 日期：獨立 DOM，直接用 class 控制，避免任何前段 animation.finished 卡住。 */
+    promoDate.classList.remove("is-leaving");
+    promoDate.classList.add("is-visible");
 
-    await sleep(1500);
-    if (thisRun !== runId) return;
+    /* 完整出現後停留 1.5 秒。 */
+    await sleep(860 + 1500);
 
-    clearElementAnimations(promoLine);
-    await animateTo(
-      promoLine,
-      [
-        {transform:"translateY(0%)",opacity:1},
-        {transform:"translateY(-35%)",opacity:0}
-      ],
-      {duration:600,easing:"ease-in-out"}
-    );
-    if (thisRun !== runId) return;
+    promoDate.classList.remove("is-visible");
+    promoDate.classList.add("is-leaving");
+    await sleep(600);
+    promoDate.classList.remove("is-leaving");
 
-    clearElementAnimations(promoLine);
-    promoLine.textContent = "拾洸記憶展";
-    setState(promoLine,{transform:"translateY(118%)",opacity:"0"});
-    await animateTo(
-      promoLine,
-      [
-        {transform:"translateY(118%)",opacity:0},
-        {transform:"translateY(0%)",opacity:1}
-      ],
-      {duration:860,easing:"cubic-bezier(.22,1,.36,1)"}
-    );
+    /* 同位置顯示展名並停留。 */
+    promoTitle.classList.remove("is-leaving");
+    promoTitle.classList.add("is-visible");
 
   }
 
