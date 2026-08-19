@@ -112,37 +112,88 @@
 
   function drawPersonShadow(scale) {
     const shadow = document.querySelector(".brand-story-person-shadow");
-    if (!shadow) return;
-
     const wrap = document.querySelector(".brand-story-person-wrap");
-    if (!wrap) return;
+    if (!shadow || !wrap) return;
 
     const wrapStyle = getComputedStyle(wrap);
     const wrapOpacity = clamp(number(wrapStyle.opacity,0),0,1);
     if (wrapOpacity <= .001) return;
 
-    const rect = rectToExport(shadow.getBoundingClientRect(),scale);
-    if (rect.width <= 0 || rect.height <= 0) return;
+    const wrapRect = rectToExport(wrap.getBoundingClientRect(),scale);
+    if (wrapRect.width <= 0 || wrapRect.height <= 0) return;
+
+    /*
+      不再使用 shadow.getBoundingClientRect()。
+      getBoundingClientRect() 取得的是旋轉後的外接矩形，會遺失原 CSS 的
+      rotate(120deg)、transform-origin、402% 寬度與 ::after 第二層陰影。
+      這裡直接依網站 CSS 尺寸與 transform 重建。
+    */
+    const shadowWidth = wrapRect.width * 4.02;
+    const shadowHeight = 34 * scale.sy;
+    const left = wrapRect.x + wrapRect.width * .50;
+    const top = wrapRect.y + wrapRect.height - shadowHeight;
+    const originX = left;
+    const originY = top + shadowHeight * .50;
+    const translateX = shadowWidth * .04;
+    const translateY = 5 * scale.sy;
+    const angle = 120 * Math.PI / 180;
+
+    function applyShadowTransform(ctx) {
+      ctx.translate(originX,originY);
+      ctx.translate(translateX,translateY);
+      ctx.rotate(angle);
+      ctx.translate(-originX,-originY);
+    }
 
     sceneCtx.save();
     sceneCtx.globalAlpha = .90 * wrapOpacity;
+    applyShadowTransform(sceneCtx);
 
     const gradient = sceneCtx.createLinearGradient(
-      rect.x,rect.y,
-      rect.x + rect.width,rect.y + rect.height
+      left,top,
+      left + shadowWidth,top
     );
     gradient.addColorStop(0,"rgba(25,17,14,.70)");
     gradient.addColorStop(.30,"rgba(35,23,18,.50)");
     gradient.addColorStop(.67,"rgba(35,23,18,.24)");
     gradient.addColorStop(1,"rgba(35,23,18,0)");
 
-    sceneCtx.filter = `blur(${Math.max(1,.9 * scale.sx)}px)`;
+    sceneCtx.filter = `blur(${Math.max(.5,.9 * scale.sx)}px)`;
     sceneCtx.fillStyle = gradient;
     sceneCtx.beginPath();
-    sceneCtx.moveTo(rect.x,rect.y + rect.height * .43);
-    sceneCtx.lineTo(rect.x + rect.width,rect.y);
-    sceneCtx.lineTo(rect.x + rect.width,rect.y + rect.height);
-    sceneCtx.lineTo(rect.x,rect.y + rect.height * .57);
+    sceneCtx.moveTo(left,top + shadowHeight * .43);
+    sceneCtx.lineTo(left + shadowWidth,top);
+    sceneCtx.lineTo(left + shadowWidth,top + shadowHeight);
+    sceneCtx.lineTo(left,top + shadowHeight * .57);
+    sceneCtx.closePath();
+    sceneCtx.fill();
+    sceneCtx.restore();
+
+    /* 對應 .brand-story-person-shadow::after */
+    const afterLeft = left + shadowWidth * .45;
+    const afterTop = top + shadowHeight * .50 - (shadowHeight * 1.50) * .50;
+    const afterWidth = shadowWidth * .55;
+    const afterHeight = shadowHeight * 1.50;
+
+    sceneCtx.save();
+    sceneCtx.globalAlpha = .58 * wrapOpacity;
+    applyShadowTransform(sceneCtx);
+
+    const afterGradient = sceneCtx.createLinearGradient(
+      afterLeft,afterTop,
+      afterLeft + afterWidth,afterTop
+    );
+    afterGradient.addColorStop(0,"rgba(35,23,18,.18)");
+    afterGradient.addColorStop(.52,"rgba(35,23,18,.08)");
+    afterGradient.addColorStop(1,"rgba(35,23,18,0)");
+
+    sceneCtx.filter = `blur(${Math.max(.5,4.6 * scale.sx)}px)`;
+    sceneCtx.fillStyle = afterGradient;
+    sceneCtx.beginPath();
+    sceneCtx.moveTo(afterLeft,afterTop + afterHeight * .34);
+    sceneCtx.lineTo(afterLeft + afterWidth,afterTop);
+    sceneCtx.lineTo(afterLeft + afterWidth,afterTop + afterHeight);
+    sceneCtx.lineTo(afterLeft,afterTop + afterHeight * .66);
     sceneCtx.closePath();
     sceneCtx.fill();
     sceneCtx.restore();
@@ -327,8 +378,19 @@
 
     if (clipEl) {
       const clipRect = rectToExport(clipEl.getBoundingClientRect(),scale);
+      /*
+        DOM 的 mask 寬度是依瀏覽器字型排版計算；Canvas measureText 在
+        Noto Serif TC 載入／字距計算上可能多出數個像素。
+        只放寬左右裁切區，垂直方向仍保持原 reveal 遮罩效果。
+      */
+      const clipSafeX = 32 * scale.sx;
       exportCtx.beginPath();
-      exportCtx.rect(clipRect.x,clipRect.y,clipRect.width,clipRect.height);
+      exportCtx.rect(
+        clipRect.x - clipSafeX,
+        clipRect.y,
+        clipRect.width + clipSafeX * 2,
+        clipRect.height
+      );
       exportCtx.clip();
     }
 
@@ -379,9 +441,18 @@
   }
 
   function drawBrackets(scale) {
+    const finalCopy = document.querySelector(".brand-story-final-copy");
+    const finalCopyOpacity = finalCopy
+      ? clamp(number(getComputedStyle(finalCopy).opacity,1),0,1)
+      : 1;
+
+    /* 父層已隱藏後，錄影 Canvas 也必須立即停止畫括號。 */
+    if (finalCopyOpacity <= .001) return;
+
     document.querySelectorAll(".brand-story-final-bracket").forEach(el => {
       const style = getComputedStyle(el);
-      const opacity = clamp(number(style.opacity,0),0,1);
+      const opacity =
+        clamp(number(style.opacity,0),0,1) * finalCopyOpacity;
       if (opacity <= .001) return;
 
       const rect = rectToExport(el.getBoundingClientRect(),scale);
