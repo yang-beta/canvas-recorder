@@ -3,486 +3,134 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>洸限｜品牌故事</title>
+<title>洸限｜品牌故事 (1080p 背景錄影版)</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap');
 
 :root {
-  --coral-main:#FFB088;
-  --coral-main-rgb:255,176,136;
-  --coral-light:#FFC7AB;
-  --coral-light-rgb:255,199,171;
   --surface-bg:#1a1a1a;
   --text-main:#E6E6E8;
-  --font-display:1.6rem;
-  --font-ui:.86rem;
 }
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing:border-box;
   margin:0;
   padding:0;
 }
 
-html,
-body {
+html, body {
   width:100%;
   height:100%;
   overflow:hidden;
   background:var(--surface-bg);
   color:var(--text-main);
-  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
-}
-
-button {
-  font:inherit;
+  font-family:"Noto Serif TC", "PMingLiU", serif;
 }
 
 #brandStorySection {
-  --focus-left:35%;
-  --focus-top:30%;
-  --focus-width:30%;
-  --focus-height:20%;
   position:relative;
-  isolation:isolate;
   width:100vw;
   height:100vh;
   overflow:hidden;
-  background:
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(var(--coral-main-rgb),.045),
-      transparent 46%
-    ),
-    var(--surface-bg);
-}
-
-#brandStoryCanvas {
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  z-index:0;
-  pointer-events:none;
-}
-
-/* 前後文字共用同一套明體設定，避免字型／字重／字距產生視覺差異 */
-.brand-story-final-copy,
-.brand-story-promo-copy {
-  font-family:"Noto Serif TC","PMingLiU","新細明體",serif;
-  font-size:var(--font-display);
-  font-weight:400;
-  line-height:1.95;
-  letter-spacing:.6rem;
-  text-align:center;
-}
-
-.brand-story-final-copy {
-  position:absolute;
-  left:50%;
-  top:47%;
-  transform:translate(-50%,-50%);
-  z-index:8;
-  width:min(86vw,980px);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:18px;
-  color:rgba(244,244,244,.94);
-  pointer-events:none;
-}
-
-.brand-story-final-mask {
-  display:block;
-  overflow:hidden;
-  padding:0 2px;
-}
-
-.brand-story-final-line {
-  display:inline-block;
-  transform:translateY(118%);
-  opacity:0;
-  will-change:transform,opacity;
-}
-
-.brand-story-final-line.is-brand-color {
-  color:#FF6B6B;
-}
-
-.brand-story-promo-copy {
-  position:absolute;
-  left:50%;
-  top:47%;
-  transform:translate(-50%,-50%);
-  z-index:10;
-  width:min(86vw,980px);
-  height:2.2em;
-  color:#FF6B6B;
-  pointer-events:none;
-}
-
-.brand-story-promo-item {
-  position:absolute;
-  inset:0;
+  background:var(--surface-bg);
   display:flex;
   justify-content:center;
   align-items:center;
-  overflow:hidden;
-  padding:0 2px;
-  opacity:0;
-  visibility:hidden;
 }
 
-/* 調整字體浮現時間為 1.5 秒，動態更緩慢流暢 */
-.brand-story-promo-line {
-  display:inline-block;
-  transform:translateY(118%);
-  opacity:0;
-  transition:transform 1.5s cubic-bezier(.22,1,.36,1), opacity 1.5s cubic-bezier(.22,1,.36,1);
-  color:#FF6B6B;
-  filter:none;
-  mix-blend-mode:normal;
-}
-
-.brand-story-promo-item.is-visible {
-  opacity:1;
-  visibility:visible;
-}
-
-.brand-story-promo-item.is-visible .brand-story-promo-line {
-  transform:translateY(0%);
-  opacity:1;
-}
-
-.brand-story-promo-item.is-leaving {
-  opacity:1;
-  visibility:visible;
-}
-
-.brand-story-promo-item.is-leaving .brand-story-promo-line {
-  transform:translateY(-35%);
-  opacity:0;
-  transition-duration:.8s;
-  transition-timing-function:ease-in-out;
-}
-
-.brand-story-final-bracket {
-  position:absolute;
-  top:50%;
-  width:24px;
-  height:118px;
-  transform:translateY(-50%) scaleY(.45);
-  transform-origin:center;
-  opacity:0;
-  pointer-events:none;
-  will-change:transform,opacity;
-}
-
-.brand-story-final-bracket::before,
-.brand-story-final-bracket::after {
-  content:"";
-  position:absolute;
-  width:22px;
-  height:1px;
-  background:rgba(230,230,232,.64);
-}
-
-.brand-story-final-bracket-left {
-  left:calc(50% - 205px);
-  border-left:1px solid rgba(230,230,232,.64);
-}
-
-.brand-story-final-bracket-left::before {
-  top:0;
-  left:0;
-}
-
-.brand-story-final-bracket-left::after {
-  bottom:0;
-  left:0;
-}
-
-.brand-story-final-bracket-right {
-  right:calc(50% - 205px);
-  border-right:1px solid rgba(230,230,232,.64);
-}
-
-.brand-story-final-bracket-right::before {
-  top:0;
-  right:0;
-}
-
-.brand-story-final-bracket-right::after {
-  bottom:0;
-  right:0;
-}
-
-.brand-story-person-wrap {
-  position:absolute;
-  left:58.5%;
-  bottom:22.5%;
-  width:clamp(26px,2.35vw,44px);
-  z-index:5; /* 低於模糊遮罩 z-index:6，聚焦時人物會一起模糊 */
-  pointer-events:none;
-  opacity:0;
-}
-
-.brand-story-person {
-  position:relative;
-  display:block;
+#brandStoryCanvas {
   width:100%;
-  height:auto;
-  z-index:2;
-  opacity:.92;
-  filter:
-    brightness(0)
-    drop-shadow(0 0 2px rgba(0,0,0,.60));
-}
-
-.brand-story-person-shadow {
-  position:absolute;
-  left:50%;
-  bottom:0;
-  width:402%;
-  height:34px;
-  transform:translate(4%,5px) rotate(120deg);
-  transform-origin:0 50%;
-  border-radius:0;
-  clip-path:polygon(0 43%,100% 0,100% 100%,0 57%);
-  background:
-    linear-gradient(
-      90deg,
-      rgba(25,17,14,.70) 0%,
-      rgba(35,23,18,.50) 30%,
-      rgba(35,23,18,.24) 67%,
-      rgba(35,23,18,0) 100%
-    );
-  filter:blur(.9px);
-  opacity:.90;
-  z-index:1;
-}
-
-.brand-story-person-shadow::after {
-  content:"";
-  position:absolute;
-  left:45%;
-  top:50%;
-  width:55%;
-  height:150%;
-  transform:translateY(-50%);
-  clip-path:polygon(0 34%,100% 0,100% 100%,0 66%);
-  background:
-    linear-gradient(
-      90deg,
-      rgba(35,23,18,.18) 0%,
-      rgba(35,23,18,.08) 52%,
-      rgba(35,23,18,0) 100%
-    );
-  filter:blur(4.6px);
-  opacity:.58;
-}
-
-#brandStorySection::before,
-#brandStorySection::after {
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:6;
-  pointer-events:none;
-  opacity:0;
-  transition:opacity 2s ease-in-out;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite:exclude;
-  -webkit-mask-composite:xor;
-}
-
-#brandStorySection::before {
-  padding:
-    max(0px,var(--focus-top))
-    max(0px,calc(100% - var(--focus-left) - var(--focus-width)))
-    max(0px,calc(100% - var(--focus-top) - var(--focus-height)))
-    max(0px,var(--focus-left));
-  backdrop-filter:blur(2.4px);
-  -webkit-backdrop-filter:blur(2.4px);
-  background:rgba(18,18,18,.025);
-}
-
-#brandStorySection::after {
-  padding:
-    max(0px,var(--focus-top))
-    max(0px,calc(100% - var(--focus-left) - var(--focus-width)))
-    max(0px,calc(100% - var(--focus-top) - var(--focus-height)))
-    max(0px,var(--focus-left));
-  backdrop-filter:blur(6.8px);
-  -webkit-backdrop-filter:blur(6.8px);
-  background:rgba(18,18,18,.045);
-}
-
-#brandStorySection.brand-story-focus-ready .brand-story-final-copy {
-  pointer-events:auto;
-}
-
-#brandStorySection.brand-story-focus-active::before,
-#brandStorySection.brand-story-focus-active::after {
-  opacity:1;
+  height:100%;
+  object-fit:contain;
 }
 </style>
 </head>
 <body>
-<section id="brandStorySection" aria-label="洸限品牌故事">
-  <canvas id="brandStoryCanvas" aria-hidden="true"></canvas>
 
-  <div class="brand-story-final-copy" aria-label="品牌故事結語">
-    <span class="brand-story-final-bracket brand-story-final-bracket-left" aria-hidden="true"></span>
-    <span class="brand-story-final-mask">
-      <span class="brand-story-final-line" id="brandStoryFinal1">因為有限 所以珍惜</span>
-    </span>
-    <span class="brand-story-final-mask">
-      <span class="brand-story-final-line" id="brandStoryFinal2">因為記得 所以重逢</span>
-    </span>
-    <span class="brand-story-final-bracket brand-story-final-bracket-right" aria-hidden="true"></span>
-  </div>
-
-  <div class="brand-story-promo-copy" id="brandStoryPromo" aria-live="polite">
-    <span class="brand-story-promo-mask brand-story-promo-item" id="brandStoryPromoDate">
-      <span class="brand-story-promo-line">9月1日</span>
-    </span>
-    <span class="brand-story-promo-mask brand-story-promo-item" id="brandStoryPromoTitle">
-      <span class="brand-story-promo-line">拾洸記憶展</span>
-    </span>
-  </div>
-
-  <div class="brand-story-person-wrap" aria-hidden="true">
-    <img class="brand-story-person" src="./img/man-s.png" alt="">
-    <div class="brand-story-person-shadow"></div>
-  </div>
+<section id="brandStorySection">
+  <!-- 所有背景、文字、括號、人物、柔焦遮罩均硬性繪製於 1920x1080 Canvas -->
+  <canvas id="brandStoryCanvas" width="1920" height="1080"></canvas>
 </section>
 
 <script>
 (() => {
   "use strict";
 
-  const page = document.getElementById("brandStorySection");
   const canvas = document.getElementById("brandStoryCanvas");
   const ctx = canvas.getContext("2d");
-  const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
-  const coral = {
-    main: [255,176,136]
-  };
+  // 硬性鎖定極致畫質尺寸 1920x1080
+  const W = 1920;
+  const H = 1080;
+  canvas.width = W;
+  canvas.height = H;
 
-  const coralRgba = (name, alpha) => {
-    const c = coral[name] || coral.main;
-    return `rgba(${c[0]},${c[1]},${c[2]},${alpha})`;
+  // 載入人物圖片
+  const personImg = new Image();
+  personImg.src = "./img/man-s.png";
+
+  // 動畫即時狀態變數
+  let state = {
+    personAlpha: 0,
+    line1Y: 50, line1Alpha: 0,
+    line2Y: 50, line2Alpha: 0,
+    bracketScale: 0.45, bracketAlpha: 0,
+    focusBlurAlpha: 0,
+    promoDateY: 50, promoDateAlpha: 0,
+    promoTitleY: 50, promoTitleAlpha: 0
   };
 
   /* ============================================================
-     品牌故事背景 Canvas｜桌機版
+     1. 背景 Canvas 繪製 (3D 地平線與掃描光束)
      ============================================================ */
-  let canvasRafId = null;
-  let lastFrame = 0;
   let staticCoralRows = [];
-
-  function resizeCanvas() {
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = Math.max(1, Math.round(rect.width * DPR));
-    canvas.height = Math.max(1, Math.round(rect.height * DPR));
-  }
-
   function generateStaticCoralRows(lineCount = 58) {
     const targetCount = 4 + Math.floor(Math.random() * 4);
     const rows = new Set();
-
     while (rows.size < targetCount) {
-      rows.add(
-        4 +
-        Math.floor(
-          Math.random() *
-          Math.max(1, lineCount - 10)
-        )
-      );
+      rows.add(4 + Math.floor(Math.random() * Math.max(1, lineCount - 10)));
     }
-
     staticCoralRows = [...rows].sort((a,b) => a-b);
   }
+  generateStaticCoralRows(58);
 
-  function drawLandscape(time = 0) {
-    const w = canvas.width;
-    const h = canvas.height;
+  function drawBackground(time) {
+    ctx.fillStyle = "#1a1a1a";
+    ctx.fillRect(0, 0, W, H);
 
-    ctx.clearRect(0,0,w,h);
-
-    const glowX = w * .255;
-    const glowY = h * .245;
-    const glowR = Math.max(w,h) * .31;
-    const glow = ctx.createRadialGradient(
-      glowX,glowY,0,
-      glowX,glowY,glowR
-    );
-
-    glow.addColorStop(0,"rgba(255,176,136,.055)");
-    glow.addColorStop(.35,"rgba(111,140,128,.030)");
-    glow.addColorStop(1,"rgba(0,0,0,0)");
-
+    // 中心光暈
+    const glowX = W * .255;
+    const glowY = H * .245;
+    const glowR = Math.max(W,H) * .31;
+    const glow = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, glowR);
+    glow.addColorStop(0, "rgba(255,176,136,.055)");
+    glow.addColorStop(.35, "rgba(111,140,128,.030)");
+    glow.addColorStop(1, "rgba(0,0,0,0)");
     ctx.fillStyle = glow;
-    ctx.fillRect(0,0,w,h);
+    ctx.fillRect(0, 0, W, H);
 
-    const horizonY = h * (5 / 7);
-    const floorHeight = h - horizonY;
-    const personFootY = h * .775;
+    // 網格地平線
+    const horizonY = H * (5 / 7);
+    const floorHeight = H - horizonY;
     const lineCount = 58;
-
     const sweepProgress = ((time * .000055) % 1 + 1) % 1;
     const sweepLine = sweepProgress * (lineCount - 1);
     const crossRange = .10;
-    const endFade =
-      1 -
-      Math.max(
-        0,
-        Math.min(
-          1,
-          (sweepProgress - (1 - crossRange)) / crossRange
-        )
-      );
+    const endFade = 1 - Math.max(0, Math.min(1, (sweepProgress - (1 - crossRange)) / crossRange));
+    const nextFade = Math.max(0, Math.min(1, (sweepProgress - (1 - crossRange)) / crossRange));
 
-    const nextFade =
-      Math.max(
-        0,
-        Math.min(
-          1,
-          (sweepProgress - (1 - crossRange)) / crossRange
-        )
-      );
-
-    for (let row = 0; row < lineCount; row += 1) {
+    for (let row = 0; row < lineCount; row++) {
       const t = row / (lineCount - 1);
-      const baseY =
-        horizonY +
-        Math.pow(t,1.36) *
-        (floorHeight + 10 * DPR);
-
-      const alphaProgress =
-        Math.max(
-          0,
-          Math.min(
-            1,
-            (baseY - horizonY) /
-            Math.max(1, personFootY - horizonY)
-          )
-        );
-
+      const baseY = horizonY + Math.pow(t, 1.36) * (floorHeight + 10);
+      const alphaProgress = Math.max(0, Math.min(1, (baseY - horizonY) / Math.max(1, H * .775 - horizonY)));
       const baseAlpha = .05 + .45 * alphaProgress;
       const thicknessPattern = [.56,.84,.64,1.10,.70,.94][row % 6];
-      const baseWidth = (thicknessPattern + t * .14) * DPR;
+      const baseWidth = thicknessPattern + t * .14;
 
       ctx.save();
       ctx.beginPath();
-      ctx.moveTo(0,baseY);
-      ctx.lineTo(w,baseY);
+      ctx.moveTo(0, baseY);
+      ctx.lineTo(W, baseY);
       ctx.strokeStyle = `rgba(230,230,232,${baseAlpha})`;
       ctx.lineWidth = baseWidth;
       ctx.stroke();
@@ -491,269 +139,247 @@ button {
       if (staticCoralRows.includes(row)) {
         ctx.save();
         ctx.beginPath();
-        ctx.moveTo(0,baseY);
-        ctx.lineTo(w,baseY);
-        ctx.strokeStyle =
-          coralRgba("main",Math.min(.34,baseAlpha * .72));
-        ctx.lineWidth = Math.max(baseWidth,.82 * DPR);
+        ctx.moveTo(0, baseY);
+        ctx.lineTo(W, baseY);
+        ctx.strokeStyle = `rgba(255,176,136,${Math.min(.34, baseAlpha * .72)})`;
+        ctx.lineWidth = Math.max(baseWidth, .82);
         ctx.stroke();
         ctx.restore();
       }
 
       const currentDistance = Math.abs(row - sweepLine);
-      const currentGlow =
-        Math.max(0,1-currentDistance/2.35) * endFade;
-
+      const currentGlow = Math.max(0, 1 - currentDistance / 2.35) * endFade;
       const nextDistance = Math.abs(row);
-      const nextGlow =
-        Math.max(0,1-nextDistance/2.35) * nextFade;
-
-      const lineGlow = Math.max(currentGlow,nextGlow);
+      const nextGlow = Math.max(0, 1 - nextDistance / 2.35) * nextFade;
+      const lineGlow = Math.max(currentGlow, nextGlow);
 
       if (lineGlow > 0) {
         ctx.save();
         ctx.beginPath();
-        ctx.moveTo(0,baseY);
-        ctx.lineTo(w,baseY);
-        ctx.strokeStyle =
-          coralRgba("main",.10 + lineGlow * .30);
-        ctx.lineWidth =
-          Math.max(baseWidth,(.88 + lineGlow * .25) * DPR);
-        ctx.shadowColor =
-          coralRgba("main",.07 + lineGlow * .18);
-        ctx.shadowBlur =
-          (1.5 + lineGlow * 3) * DPR;
+        ctx.moveTo(0, baseY);
+        ctx.lineTo(W, baseY);
+        ctx.strokeStyle = `rgba(255,176,136,${.10 + lineGlow * .30})`;
+        ctx.lineWidth = Math.max(baseWidth, .88 + lineGlow * .25);
         ctx.stroke();
         ctx.restore();
       }
     }
   }
 
-  function renderCanvas(timestamp = 0) {
-    if (timestamp - lastFrame >= 32) {
-      drawLandscape(timestamp);
-      lastFrame = timestamp;
+  /* ============================================================
+     2. 全場景繪製 (DOM 轉 Canvas 像素)
+     ============================================================ */
+  function drawScene(time) {
+    drawBackground(time);
+
+    // 人物與陰影
+    if (state.personAlpha > 0) {
+      ctx.save();
+      ctx.globalAlpha = state.personAlpha * 0.92;
+      const pw = 45, ph = 135;
+      const px = W * 0.585, py = H * 0.775 - ph + 10;
+
+      // 繪製人影倒影
+      ctx.save();
+      ctx.fillStyle = "rgba(25,17,14,0.5)";
+      ctx.beginPath();
+      ctx.ellipse(px + pw/2, py + ph, pw * 1.5, 8, Math.PI / 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      if (personImg.complete && personImg.naturalWidth > 0) {
+        ctx.drawImage(personImg, px, py, pw, ph);
+      }
+      ctx.restore();
     }
-    canvasRafId = requestAnimationFrame(renderCanvas);
-  }
 
-  function startCanvas() {
-    resizeCanvas();
-    generateStaticCoralRows(58);
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
 
-    if (canvasRafId === null) {
-      canvasRafId = requestAnimationFrame(renderCanvas);
+    // 第一句文字: 因為有限 所以珍惜
+    if (state.line1Alpha > 0) {
+      ctx.font = "400 38px 'Noto Serif TC', 'PMingLiU', serif";
+      ctx.fillStyle = `rgba(244,244,244,${state.line1Alpha * 0.94})`;
+      ctx.letterSpacing = "0.6rem";
+      ctx.fillText("因為有限 所以珍惜", W / 2, H * 0.47 - 30 + state.line1Y);
     }
-  }
 
-  /* 補充計算背景聚焦區域的函式 */
-  function updateFocusBounds() {
-    const copyEl = document.querySelector(".brand-story-final-copy");
-    if (!copyEl) return;
-    const rect = copyEl.getBoundingClientRect();
-    const secRect = page.getBoundingClientRect();
+    // 第二句文字: 因為記得 所以重逢
+    if (state.line2Alpha > 0) {
+      ctx.font = "400 38px 'Noto Serif TC', 'PMingLiU', serif";
+      ctx.fillStyle = `rgba(244,244,244,${state.line2Alpha * 0.94})`;
+      ctx.letterSpacing = "0.6rem";
+      ctx.fillText("因為記得 所以重逢", W / 2, H * 0.47 + 30 + state.line2Y);
+    }
 
-    const left = ((rect.left - secRect.left) / secRect.width) * 100;
-    const top = ((rect.top - secRect.top) / secRect.height) * 100;
-    const width = (rect.width / secRect.width) * 100;
-    const height = (rect.height / secRect.height) * 100;
+    // ［ ］ 括號
+    if (state.bracketAlpha > 0) {
+      ctx.strokeStyle = `rgba(230,230,232,${state.bracketAlpha * 0.64})`;
+      ctx.lineWidth = 1.5;
+      const bw = 28, bh = 130 * state.bracketScale;
+      const cy = H * 0.47;
 
-    page.style.setProperty("--focus-left", `${left}%`);
-    page.style.setProperty("--focus-top", `${top}%`);
-    page.style.setProperty("--focus-width", `${width}%`);
-    page.style.setProperty("--focus-height", `${height}%`);
+      // 左括號
+      const lx = W / 2 - 245;
+      ctx.beginPath();
+      ctx.moveTo(lx + bw, cy - bh/2);
+      ctx.lineTo(lx, cy - bh/2);
+      ctx.lineTo(lx, cy + bh/2);
+      ctx.lineTo(lx + bw, cy + bh/2);
+      ctx.stroke();
+
+      // 右括號
+      const rx = W / 2 + 245;
+      ctx.beginPath();
+      ctx.moveTo(rx - bw, cy - bh/2);
+      ctx.lineTo(rx, cy - bh/2);
+      ctx.lineTo(rx, cy + bh/2);
+      ctx.lineTo(rx - bw, cy + bh/2);
+      ctx.stroke();
+    }
+
+    // 品牌色文字 1: 9月1日
+    if (state.promoDateAlpha > 0) {
+      ctx.font = "400 42px 'Noto Serif TC', 'PMingLiU', serif";
+      ctx.fillStyle = `rgba(255,107,107,${state.promoDateAlpha})`;
+      ctx.fillText("9月1日", W / 2, H * 0.47 + state.promoDateY);
+    }
+
+    // 品牌色文字 2: 拾洸記憶展
+    if (state.promoTitleAlpha > 0) {
+      ctx.font = "400 42px 'Noto Serif TC', 'PMingLiU', serif";
+      ctx.fillStyle = `rgba(255,107,107,${state.promoTitleAlpha})`;
+      ctx.fillText("拾洸記憶展", W / 2, H * 0.47 + state.promoTitleY);
+    }
+    ctx.restore();
+
+    // 聚焦遮罩模擬 (Focus Blur)
+    if (state.focusBlurAlpha > 0) {
+      ctx.save();
+      ctx.fillStyle = `rgba(18,18,18, ${state.focusBlurAlpha * 0.45})`;
+      
+      // 中間保留 ［ ］ 清晰區塊
+      const focusW = 520, focusH = 180;
+      const fx = W/2 - focusW/2, fy = H*0.47 - focusH/2;
+      
+      ctx.beginPath();
+      ctx.rect(0, 0, W, H);
+      ctx.rect(fx, fy, focusW, focusH);
+      ctx.fill("evenodd");
+      ctx.restore();
+    }
   }
 
   /* ============================================================
-     最終 Slogan 動畫控制
+     3. 緩動動畫引擎 (Ease Out Cubic)
      ============================================================ */
-  let runId = 0;
+  function animate(target, props, duration) {
+    return new Promise(resolve => {
+      const start = performance.now();
+      const initial = {};
+      for (let k in props) initial[k] = target[k];
 
-  const sleep = ms =>
-    new Promise(resolve => setTimeout(resolve,ms));
-
-  function setState(el, styles) {
-    if (!el) return;
-    Object.assign(el.style,styles);
-  }
-
-  function animateTo(el, keyframes, options) {
-    if (!el) return Promise.resolve();
-    const animation = el.animate(keyframes,{
-      fill:"forwards",
-      ...options
-    });
-    return animation.finished.catch(() => {});
-  }
-
-  function resetAnimation() {
-    runId += 1;
-    page.classList.remove("brand-story-focus-active");
-
-    document
-      .querySelectorAll(".brand-story-final-line")
-      .forEach(el => {
-        setState(el,{
-          transform:"translateY(118%)",
-          opacity:"0"
-        });
-      });
-
-    document
-      .querySelectorAll(".brand-story-final-bracket")
-      .forEach(el => {
-        setState(el,{
-          transform:"translateY(-50%) scaleY(.45)",
-          opacity:"0"
-        });
-      });
-
-    setState(
-      document.querySelector(".brand-story-final-copy"),
-      {opacity:"1"}
-    );
-
-    setState(
-      document.querySelector(".brand-story-person-wrap"),
-      {opacity:"0"}
-    );
-
-    const promoDate = document.getElementById("brandStoryPromoDate");
-    const promoTitle = document.getElementById("brandStoryPromoTitle");
-    [promoDate,promoTitle].forEach(el => {
-      if (!el) return;
-      el.classList.remove("is-visible","is-leaving");
-    });
-  }
-
-  function clearElementAnimations(el) {
-    if (!el) return;
-    el.getAnimations().forEach(animation => animation.cancel());
-  }
-
-  /* 調慢字體浮現時間預設為 1600ms (1.6秒) */
-  async function reveal(id, duration = 1600) {
-    const el = document.getElementById(id);
-    clearElementAnimations(el);
-
-    await animateTo(
-      el,
-      [
-        {transform:"translateY(118%)",opacity:0},
-        {transform:"translateY(0%)",opacity:1}
-      ],
-      {
-        duration,
-        easing:"cubic-bezier(.22,1,.36,1)"
+      function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        for (let k in props) {
+          target[k] = initial[k] + (props[k] - initial[k]) * ease;
+        }
+        if (progress < 1) requestAnimationFrame(step);
+        else resolve();
       }
-    );
+      requestAnimationFrame(step);
+    });
   }
 
-  async function playAnimation() {
-    resetAnimation();
-    const thisRun = runId;
-    const final1 = document.getElementById("brandStoryFinal1");
-    const final2 = document.getElementById("brandStoryFinal2");
-    const brackets = [...document.querySelectorAll(".brand-story-final-bracket")];
-    const personWrap = document.querySelector(".brand-story-person-wrap");
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-    /* 關鍵修復：人物淡入完成後，將 opacity: 1 寫死在 inline style 上，避免後續 clearElementAnimations 將其清除 */
-    animateTo(
-      personWrap,
-      [{opacity:0},{opacity:1}],
-      {duration:1200,easing:"ease-out"}
-    ).then(() => {
-      if (personWrap && thisRun === runId) {
-        personWrap.style.opacity = "1";
-      }
-    });
-
+  /* ============================================================
+     4. 完整腳本時間軸 (Timeline)
+     ============================================================ */
+  async function runTimeline() {
+    // 人物登場
+    animate(state, { personAlpha: 1 }, 1200);
     await sleep(2500);
-    if (thisRun !== runId) return;
 
-    /* 逐行浮現文字 (時間已調慢) */
-    await reveal("brandStoryFinal1", 1600);
-    if (thisRun !== runId) return;
+    // 第一句文字緩緩浮現 (1.6秒)
+    animate(state, { line1Y: 0, line1Alpha: 1 }, 1600);
     await sleep(1500);
 
-    await reveal("brandStoryFinal2", 1600);
-    if (thisRun !== runId) return;
+    // 第二句文字緩緩浮現 (1.6秒)
+    animate(state, { line2Y: 0, line2Alpha: 1 }, 1600);
     await sleep(1000);
 
-    await Promise.all(
-      brackets.map(el =>
-        animateTo(
-          el,
-          [
-            {transform:"translateY(-50%) scaleY(.45)",opacity:0},
-            {transform:"translateY(-50%) scaleY(1)",opacity:1}
-          ],
-          {duration:620,easing:"cubic-bezier(.22,1,.36,1)"}
-        )
-      )
-    );
-    if (thisRun !== runId) return;
-
-    updateFocusBounds();
-
-    /* ［ ］出現後 0.5 秒開始聚焦 */
+    // ［ ］ 括號出現
+    animate(state, { bracketScale: 1, bracketAlpha: 1 }, 620);
     await sleep(500);
-    if (thisRun !== runId) return;
-    page.classList.add("brand-story-focus-active");
 
-    /* 聚焦 2 秒 + 停留 2 秒 */
-    await sleep(4000);
-    if (thisRun !== runId) return;
-    page.classList.remove("brand-story-focus-active");
-
-    /* 2 秒漸漸恢復 */
+    // 聚焦：慢慢模糊 2 秒 -> 停留 2 秒 -> 恢復 2 秒
+    await animate(state, { focusBlurAlpha: 1 }, 2000);
     await sleep(2000);
-    if (thisRun !== runId) return;
+    await animate(state, { focusBlurAlpha: 0 }, 2000);
 
-    /* 僅清除文字與括號的動畫，人物不在此處被 cancel() */
-    [final1, final2, ...brackets].forEach(clearElementAnimations);
-
-    /* 清除 ［ ］ 與兩行文字 */
-    final1.style.opacity = "0";
-    final1.style.transform = "translateY(-35%)";
-    final2.style.opacity = "0";
-    final2.style.transform = "translateY(-35%)";
-    brackets.forEach(el => {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(-50%) scaleY(.78)";
-    });
-
+    // 清除 ［ ］ 與文字
+    animate(state, { line1Alpha: 0, line2Alpha: 0, bracketAlpha: 0 }, 600);
     await sleep(600);
 
-    const finalCopy = document.querySelector(".brand-story-final-copy");
-    const promoDate = document.getElementById("brandStoryPromoDate");
-    const promoTitle = document.getElementById("brandStoryPromoTitle");
-    finalCopy.style.opacity = "0";
-
-    /* 出現品牌色「9月1日」 */
-    promoDate.classList.remove("is-leaving");
-    promoDate.classList.add("is-visible");
-
+    // 出現品牌色「9月1日」 -> 1.5 秒後淡出
+    animate(state, { promoDateY: 0, promoDateAlpha: 1 }, 1500);
     await sleep(1500 + 1500);
-
-    promoDate.classList.remove("is-visible");
-    promoDate.classList.add("is-leaving");
+    animate(state, { promoDateY: -20, promoDateAlpha: 0 }, 600);
     await sleep(600);
-    promoDate.classList.remove("is-leaving");
 
-    /* 同位置出現品牌色「拾洸記憶展」並停留 */
-    promoTitle.classList.remove("is-leaving");
-    promoTitle.classList.add("is-visible");
+    // 同位置出現品牌色「拾洸記憶展」並停留
+    animate(state, { promoTitleY: 0, promoTitleAlpha: 1 }, 1500);
   }
 
-  window.addEventListener("resize",() => {
-    resizeCanvas();
-    updateFocusBounds();
-  });
+  /* ============================================================
+     5. 啟動繪製與背景 1080p 自動錄影下載
+     ============================================================ */
+  function render(time) {
+    drawScene(time);
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
 
-  startCanvas();
-  playAnimation();
+  function startRecordingAndPlay() {
+    const stream = canvas.captureStream(60);
+    const recorder = new MediaRecorder(stream, {
+      mimeType: 'video/webm;codecs=vp9',
+      videoBitsPerSecond: 12000000 // 12 Mbps 比特率
+    });
+
+    const chunks = [];
+    recorder.ondataavailable = e => chunks.push(e.data);
+    recorder.onstop = () => {
+      const blob = new Blob(chunks, { type: 'video/webm' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = '洸限_品牌故事_1080p.webm';
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+
+    recorder.start();
+    runTimeline();
+
+    // 全動畫流程約 18.5 秒，時間到自動停止錄影並匯出檔案
+    setTimeout(() => {
+      recorder.stop();
+    }, 19000);
+  }
+
+  // 確保圖片載入後立即開始播放並側錄
+  if (personImg.complete) {
+    startRecordingAndPlay();
+  } else {
+    personImg.onload = startRecordingAndPlay;
+    personImg.onerror = startRecordingAndPlay; // 防呆機制
+  }
 })();
 </script>
+
 </body>
 </html>
