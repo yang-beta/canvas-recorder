@@ -136,11 +136,12 @@ button {
   visibility:hidden;
 }
 
+/* 調整字體浮現時間為 1.5 秒，動態更緩慢流暢 */
 .brand-story-promo-line {
   display:inline-block;
   transform:translateY(118%);
   opacity:0;
-  transition:transform 1.5s cubic-bezier(.22,1,.36,1), opacity .86s cubic-bezier(.22,1,.36,1);
+  transition:transform 1.5s cubic-bezier(.22,1,.36,1), opacity 1.5s cubic-bezier(.22,1,.36,1);
   will-change:transform,opacity;
 }
 
@@ -162,7 +163,7 @@ button {
 .brand-story-promo-item.is-leaving .brand-story-promo-line {
   transform:translateY(-35%);
   opacity:0;
-  transition-duration:.6s;
+  transition-duration:.8s;
   transition-timing-function:ease-in-out;
 }
 
@@ -222,7 +223,7 @@ button {
   left:58.5%;
   bottom:22.5%;
   width:clamp(26px,2.35vw,44px);
-  z-index:7; /* 調整高於背景模糊遮罩(z-index:6) */
+  z-index:7; /* 高於背景模糊遮罩 z-index: 6 */
   pointer-events:none;
   opacity:0;
 }
@@ -355,7 +356,7 @@ button {
   </div>
 
   <div class="brand-story-person-wrap" aria-hidden="true">
-    <img class="brand-story-person" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAABQCAYAAAAOYsW+AAAACXBIWXMAAAsTAAALEwEAmpwYAAAGoGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4xLWMwMDIgNzkuYTFjZDEyZjQxLCAyMDI0LzExLzA4LTE2OjA5OjIwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjYuMiAoTWFjaW50b3NoKSIgeG1wOkNyZWF0YWRhdGU9IjIwMjYtMDgtMTNUMjE6Mjc6MjQrMDg6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDI2LTA4LTEzVDIxOjMwOjQ3KzA4OjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDI2LTA4LTEzVDIxOjMwOjQ3KzA4OjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo3Y2NmZWQ4NS1lMDY5LTQ0NzEtYjI0Ny1hNjYwZDNmNjVlYzIiIHhtcE1NOkRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDpiYjNiOTg0ZS05MzU2LTY1NDYtOTYyNy1jZmJjZDFhYTMxMTEiIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmNThkNmM0NS0yYzcyLTRlNzMtYWZkNy05MWQxYTlmZjhiNGMiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOmY1OGQ2YzQ1LTJjNzItNGU3My1hZmQ3LTkxZDFhOWZmOGI0YyIgc3RFdnQ6d2hlbj0iMjAyNi0wOC0xM1QyMToyNzoyNCswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjIgKE1hY2ludG9zaCkiLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjUyYzQzMWZkLTIxZjgtNDMzOS1hMDNkLTMyMzZkMGMzZmZjZCIgc3RFdnQ6d2hlbj0iMjAyNi0wOC0xM1QyMTozMDoxMiswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjIgKE1hY2ludG9zaCkiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjdjY2ZlZDg1LWUwNjktNDQ3MS1iMjQ3LWE2NjBkM2Y2NWVjMiIgc3RFdnQ6d2hlbj0iMjAyNi0wOC0xM1QyMTozMDo0NyswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjIgKE1hY2ludG9zaCkiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+InifsgAABGtJREFUaN61mmlIVUEUx18RRVsVhdUXI4giC9uwoKAiivYPqRG2olnRphHt0kortGoUFST6QYuIQmghtayQMtujRSxawDZtL/JL3dc5NYPHw7n3LXdm4A/vnbl3fnfmzj0z59wbcBwnEImCwSAqAVQGWqL+R6xAFOD8YONSAuoQMTjCE3YSoEN+fwV1sQVuD/pGoA6DL7QF7s96y+HbbYFxKOs9erzIFrgT6KcHOMMWuE+Iod5tc1Zf8+jxEJvgXkKvsWy0/RzPdQG/Ae0AtbUBrghxj7GcxmP/ebgG9+oLvM8DyuHTmF+PGhwXBpTCX5oY6kGguxGCg+qcpGjA3cijEw7Q7QLQtw8LF9wa9NYHlMOfhgteZQDK4WPCAd8wBPV0pwEHn7sGxYLxtwXwrVA9TjY4zHy4u3uBdxmGUvAkL3CZRfBmNzA6+M8WwBr+xA083sL95b2Ol8C7LUEpeJkEvm0RrOHnORjd5CdLjxH/34uCE4UI4TXohY9Fogh0R4g6RjoEvEG4ugJQrg9wKihTAO+hPb4kHJCq9lHRgjOFJwXLIw1uBfrIKmtATVQkGC0YezZBAOMa3S6gfCivLFEhyw8f4Cvq4quE0RyktzccvALUw8AOBNvfIoDH872yLu18ejJd+oKGC+1P5B4LS6W60hkGwHpF+sjA49A4jxmz1MHTDYB1BJnNGCloXM+MOs5d4nPRCKrURUDFVnRUK9BYzsAJ6uAsA+B81VZ3EltjKUVjHjGcIotGtoHt7WXSXgGfXF1B35XhrHCgH/BV0l4hAY/Wxmpi7KlsvdltiBSa55LG+AWKQWMMPcHBaK/hhNk+wDkEPIzNo3i918JyBHQAdIickOoDvJ+0gzmwC6ATqm4gDbpxuEfAWVNIj1N8gLcS8BxQGuikqg/wGLhYRxXKPtYD/CdM58G3zvP5nquneoRoQrSfC1jHwKVuWSD4kUg6EKNGNCPcwLyjR1LtKGiNR/ppsN9UxAOXxteRycfr8DbE+gUXuDS+gC15tO49qIVf8BqXxnFVa+ZSd99EnmuKS+PpoOYuifODJsBjXcDLVb0E3mQC3McFvEM9LnVCXbWplGKl0Pg2Bf4g1OWaAhcJw5npMuuDKgVpBHzOA7xPuM85psDPBLCeXCsFcKHNHo9UdWeEoT4e+k1b4zyXKDjwJgc7/x0ID/ikJdFXj18IPZ6l6t4LdWmmwFVCr3Q+448UlJkCVwhgDH2aChOrToW+RsB5AvgYqLMAvm3yZchiAVAkhLJY9poEjxIA5WpLU8u2rhNMguMEMO63Jgux7wCTYNx7fxHiaO5Y7tl44VXJIA9BF5mtygZ4j/BtwHJmK7MBTmaQHBa8h9zSRgvOZcNay95NYRlqA7xNmNkPSHKd5k8CRlYntUKhe3zF4DdZiuG6rffHxQRSQ9ZiXepVEG4cvIlAnoMOMzAOexsb4NMMlM5GYamNoW4JesfASeTbgY62vhFYK/jl1VF/3RTBwTPVNuexEi74U6MF/Um/o+DKPdeMAAAAABJRU5ErkJggg==" alt="">
+    <img class="brand-story-person" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAABQCAYAAAAOYsW+AAAACXBIWXMAAAsTAAALEwEAmpwYAAAGoGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4xLWMwMDIgNzkuYTFjZDEyZjQxLCAyMDI0LzExLzA4LTE2OjA5OjIwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjYuMiAoTWFjaW50b3NoKSIgeG1wOkNyZWF0YWRhdGU9IjIwMjYtMDgtMTNUMjE6Mjc6MjQrMDg6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDI2LTA4LTEzVDIxOjMwOjQ3KzA4OjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDI2LTA4LTEzVDIxOjMwOjQ3KzA4OjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo3Y2NmZWQ4NS1lMDY5LTQ0NzEtYjI0Ny1hNjYwZDNmNjVlYzIiIHhtcE1NOkRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDpiYjNiOTg0ZS05MzU2LTY1NDYtOTYyNy1jZmJjZDFhYTMxMTEiIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmNThkNmM0NS0yYzcyLTRlNzMtYWZkNy05MWQxYTlmZjhiNGMiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOmY1OGQ2YzQ1LTJjNzItNGU3My1hZmQ3LTkxZDFhOWZmOGI0YyIgc3RFdnQ6d2hlbj0iMjAyNi0wOC0xM1QyMToyNzoyNCswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjIgKE1hY2ludG9zaCkiLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjUyYzQzMWZkLTIxZjgtNDMzOS1hMDNkLTMyMzZkMGMzZmZjZCIgc3RFdnQ6d2hlbj0iMjAyNi0wOC0xM1QyMTozMDoxMiswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjIgKE1hY2ludG9zaCkiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjdjY2ZlZDg1LWUwNjktNDQ3MS1iMjQ3LWE2NjBkM3Y2NWVjMiIgc3RFdnQ6d2hlbj0iMjAyNi0wOC0xM1QyMTozMDo0NyswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjIgKE1hY2ludG9zaCkiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+InifsgAABGtJREFUaN61mmlIVUEUx18RRVsVhdUXI4giC9uwoKAiivYPqRG2olnRphHt0kortGoUFST6QYuIQmghtayQMtujRSxawDZtL/JL3dc5NYPHw7n3LXdm4A/vnbl3fnfmzj0z59wbcBwnEImCwSAqAVQGWqL+R6xAFOD8YONSAuoQMTjCE3YSoEN+fwV1sQVuD/pGoA6DL7QF7s96y+HbbYFxKOs9erzIFrgT6KcHOMMWuE+Iod5tc1Zf8+jxEJvgXkKvsWy0/RzPdQG/Ae0AtbUBrghxj7GcxmP/ebgG9+oLvM8DyuHTmF+PGhwXBpTCX5oY6kGguxGCg+qcpGjA3cijEw7Q7QLQtw8LF9wa9NYHlMOfhgteZQDK4WPCAd8wBPV0pwEHn7sGxYLxtwXwrVA9TjY4zHy4u3uBdxmGUvAkL3CZRfBmNzA6+M8WwBr+xA083sL95b2Ol8C7LUEpeJkEvm0RrOHnORjd5CdLjxH/34uCE4UI4TXohY9Fogh0R4g6RjoEvEG4ugJQrg9wKihTAO+hPb4kHJCq9lHRgjOFJwXLIw1uBfrIKmtATVQkGC0YezZBAOMa3S6gfCivLFEhyw8f4Cvq4quE0RyktzccvALUw8AOBNvfIoDH872yLu18ejJd+oKGC+1P5B4LS6W60hkGwHpF+sjA49A4jxmz1MHTDYB1BJnNGCloXM+MOs5d4nPRCKrURUDFVnRUK9BYzsAJ6uAsA+B81VZ3EltjKUVjHjGcIotGtoHt7WXSXgGfXF1B35XhrHCgH/BV0l4hAY/Wxmpi7KlsvdltiBSa55LG+AWKQWMMPcHBaK/hhNk+wDkEPIzNo3i918JyBHQAdIickOoDvJ+0gzmwC6ATqm4gDbpxuEfAWVNIj1N8gLcS8BxQGuikqg/wGLhYRxXKPtYD/CdM58G3zvP5nquneoRoQrSfC1jHwKVuWSD4kUg6EKNGNCPcwLyjR1LtKGiNR/ppsN9UxAOXxteRycfr8DbE+gUXuDS+gC15tO49qIVf8BqXxnFVa+ZSd99EnmuKS+PpoOYuifODJsBjXcDLVb0E3mQC3McFvEM9LnVCXbWplGKl0Pg2Bf4g1OWaAhcJw5npMuuDKgVpBHzOA7xPuM85psDPBLCeXCsFcKHNHo9UdWeEoT4e+k1b4zyXKDjwJgc7/x0ID/ikJdFXj18IPZ6l6t4LdWmmwFVCr3Q+448UlJkCVwhgDH2aChOrToW+RsB5AvgYqLMAvm3yZchiAVAkhLJY9poEjxIA5WpLU8u2rhNMguMEMO63Jgux7wCTYNx7fxHiaO5Y7tl44VXJIA9BF5mtygZ4j/BtwHJmK7MBTmaQHBa8h9zSRgvOZcNay95NYRlqA7xNmNkPSHKd5k8CRlYntUKhe3zF4DdZiuG6rffHxQRSQ9ZiXepVEG4cvIlAnoMOMzAOexsb4NMMlM5GYamNoW4JesfASeTbgY62vhFYK/jl1VF/3RTBwTPVNuexEi74U6MF/Um/o+DKPdeMAAAAABJRU5ErkJggg==" alt="">
     <div class="brand-story-person-shadow"></div>
   </div>
 </section>
@@ -544,7 +545,7 @@ button {
     }
   }
 
-  /* 聚焦範圍計算 */
+  /* 補充計算背景聚焦區域的函式 */
   function updateFocusBounds() {
     const copyEl = document.querySelector(".brand-story-final-copy");
     if (!copyEl) return;
@@ -563,7 +564,7 @@ button {
   }
 
   /* ============================================================
-     最終 Slogan 動畫
+     最終 Slogan 動畫控制
      ============================================================ */
   let runId = 0;
 
@@ -571,12 +572,12 @@ button {
     new Promise(resolve => setTimeout(resolve,ms));
 
   function setState(el, styles) {
-    if(!el) return;
+    if (!el) return;
     Object.assign(el.style,styles);
   }
 
   function animateTo(el, keyframes, options) {
-    if(!el) return Promise.resolve();
+    if (!el) return Promise.resolve();
     const animation = el.animate(keyframes,{
       fill:"forwards",
       ...options
@@ -584,22 +585,9 @@ button {
     return animation.finished.catch(() => {});
   }
 
-  function clearElementAnimations(el) {
-    if(!el) return;
-    el.getAnimations().forEach(animation => animation.cancel());
-  }
-
   function resetAnimation() {
     runId += 1;
     page.classList.remove("brand-story-focus-active");
-
-    const final1 = document.getElementById("brandStoryFinal1");
-    const final2 = document.getElementById("brandStoryFinal2");
-    const brackets = document.querySelectorAll(".brand-story-final-bracket");
-    const finalCopy = document.querySelector(".brand-story-final-copy");
-    const personWrap = document.querySelector(".brand-story-person-wrap");
-
-    [final1, final2, ...brackets, finalCopy, personWrap].forEach(clearElementAnimations);
 
     document
       .querySelectorAll(".brand-story-final-line")
@@ -619,8 +607,15 @@ button {
         });
       });
 
-    setState(finalCopy, {opacity:"1"});
-    setState(personWrap, {opacity:"0"}); /* 重置人物透明度 */
+    setState(
+      document.querySelector(".brand-story-final-copy"),
+      {opacity:"1"}
+    );
+
+    setState(
+      document.querySelector(".brand-story-person-wrap"),
+      {opacity:"0"}
+    );
 
     const promoDate = document.getElementById("brandStoryPromoDate");
     const promoTitle = document.getElementById("brandStoryPromoTitle");
@@ -630,7 +625,13 @@ button {
     });
   }
 
-  async function reveal(id,duration = 1500) {
+  function clearElementAnimations(el) {
+    if (!el) return;
+    el.getAnimations().forEach(animation => animation.cancel());
+  }
+
+  /* 調慢字體浮現時間預設為 1600ms (1.6秒) */
+  async function reveal(id, duration = 1600) {
     const el = document.getElementById(id);
     clearElementAnimations(el);
 
@@ -655,21 +656,26 @@ button {
     const brackets = [...document.querySelectorAll(".brand-story-final-bracket")];
     const personWrap = document.querySelector(".brand-story-person-wrap");
 
-    /* 人物淡入顯現並保持 */
+    /* 關鍵修復：人物淡入完成後，將 opacity: 1 寫死在 inline style 上，避免後續 clearElementAnimations 將其清除 */
     animateTo(
       personWrap,
       [{opacity:0},{opacity:1}],
-      {duration:1200,easing:"ease-out",fill:"forwards"}
-    );
+      {duration:1200,easing:"ease-out"}
+    ).then(() => {
+      if (personWrap && thisRun === runId) {
+        personWrap.style.opacity = "1";
+      }
+    });
 
     await sleep(2500);
     if (thisRun !== runId) return;
 
-    await reveal("brandStoryFinal1",860);
+    /* 逐行浮現文字 (時間已調慢) */
+    await reveal("brandStoryFinal1", 1600);
     if (thisRun !== runId) return;
     await sleep(1500);
 
-    await reveal("brandStoryFinal2",860);
+    await reveal("brandStoryFinal2", 1600);
     if (thisRun !== runId) return;
     await sleep(1000);
 
@@ -689,21 +695,21 @@ button {
 
     updateFocusBounds();
 
-    /* ［ ］完整出現後 0.5 秒，開始 2 秒聚焦。 */
+    /* ［ ］出現後 0.5 秒開始聚焦 */
     await sleep(500);
     if (thisRun !== runId) return;
     page.classList.add("brand-story-focus-active");
 
-    /* 2 秒慢慢聚焦 + 完整聚焦停留 2 秒 (共 4 秒)。 */
+    /* 聚焦 2 秒 + 停留 2 秒 */
     await sleep(4000);
     if (thisRun !== runId) return;
     page.classList.remove("brand-story-focus-active");
 
-    /* 2 秒慢慢恢復清晰。 */
+    /* 2 秒漸漸恢復 */
     await sleep(2000);
     if (thisRun !== runId) return;
 
-    /* 清除前段動畫鎖定 */
+    /* 僅清除文字與括號的動畫，人物不在此處被 cancel() */
     [final1, final2, ...brackets].forEach(clearElementAnimations);
 
     /* 清除 ［ ］ 與兩行文字 */
@@ -727,14 +733,14 @@ button {
     promoDate.classList.remove("is-leaving");
     promoDate.classList.add("is-visible");
 
-    await sleep(860 + 1500);
+    await sleep(1500 + 1500);
 
     promoDate.classList.remove("is-visible");
     promoDate.classList.add("is-leaving");
     await sleep(600);
     promoDate.classList.remove("is-leaving");
 
-    /* 出現品牌色「拾洸記憶展」並停留 */
+    /* 同位置出現品牌色「拾洸記憶展」並停留 */
     promoTitle.classList.remove("is-leaving");
     promoTitle.classList.add("is-visible");
   }
