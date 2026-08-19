@@ -68,6 +68,17 @@ button {
   pointer-events:none;
 }
 
+/* 前後文字共用同一套明體設定，避免字型／字重／字距產生視覺差異 */
+.brand-story-final-copy,
+.brand-story-promo-copy {
+  font-family:"Noto Serif TC","PMingLiU","新細明體",serif;
+  font-size:var(--font-display);
+  font-weight:400;
+  line-height:1.95;
+  letter-spacing:.6rem;
+  text-align:center;
+}
+
 .brand-story-final-copy {
   position:absolute;
   left:50%;
@@ -80,12 +91,6 @@ button {
   align-items:center;
   gap:18px;
   color:rgba(244,244,244,.94);
-  font-family:"Noto Serif TC",serif;
-  font-size:var(--font-display);
-  font-weight:300;
-  line-height:1.95;
-  letter-spacing:.6rem;
-  text-align:center;
   pointer-events:none;
 }
 
@@ -103,7 +108,7 @@ button {
 }
 
 .brand-story-final-line.is-brand-color {
-  color:#ff6b6b;
+  color:#FF6B6B;
 }
 
 .brand-story-promo-copy {
@@ -114,13 +119,7 @@ button {
   z-index:10;
   width:min(86vw,980px);
   height:2.2em;
-  color:#ff6b6b;
-  font-family:"Noto Serif TC",serif;
-  font-size:var(--font-display);
-  font-weight:300;
-  line-height:1.95;
-  letter-spacing:.6rem;
-  text-align:center;
+  color:#FF6B6B;
   pointer-events:none;
 }
 
@@ -142,7 +141,9 @@ button {
   transform:translateY(118%);
   opacity:0;
   transition:transform 1.5s cubic-bezier(.22,1,.36,1), opacity 1.5s cubic-bezier(.22,1,.36,1);
-  will-change:transform,opacity;
+  color:#FF6B6B;
+  filter:none;
+  mix-blend-mode:normal;
 }
 
 .brand-story-promo-item.is-visible {
@@ -223,7 +224,7 @@ button {
   left:58.5%;
   bottom:22.5%;
   width:clamp(26px,2.35vw,44px);
-  z-index:5; /* 高於背景模糊遮罩 z-index: 6 */
+  z-index:5; /* 低於模糊遮罩 z-index:6，聚焦時人物會一起模糊 */
   pointer-events:none;
   opacity:0;
 }
