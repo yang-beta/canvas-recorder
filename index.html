@@ -140,7 +140,7 @@ button {
   display:inline-block;
   transform:translateY(118%);
   opacity:0;
-  transition:transform .86s cubic-bezier(.22,1,.36,1), opacity .86s cubic-bezier(.22,1,.36,1);
+  transition:transform 1.5s cubic-bezier(.22,1,.36,1), opacity .86s cubic-bezier(.22,1,.36,1);
   will-change:transform,opacity;
 }
 
@@ -630,7 +630,7 @@ button {
     });
   }
 
-  async function reveal(id,duration = 820) {
+  async function reveal(id,duration = 1500) {
     const el = document.getElementById(id);
     clearElementAnimations(el);
 
