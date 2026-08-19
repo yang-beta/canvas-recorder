@@ -68,30 +68,6 @@ button {
   pointer-events:none;
 }
 
-.skip-anim-btn {
-  position:absolute;
-  top:30px;
-  right:40px;
-  z-index:30;
-  padding:8px 16px;
-  border:1px solid rgba(230,230,232,.25);
-  border-radius:20px;
-  background:none;
-  color:var(--text-main);
-  font-size:var(--font-ui);
-  cursor:pointer;
-  opacity:1;
-  pointer-events:auto;
-  transition:
-    opacity .5s ease,
-    background-color .3s ease,
-    border-color .3s ease;
-}
-
-.skip-anim-btn:hover {
-  background-color:rgba(255,255,255,.15);
-  border-color:rgba(255,255,255,.5);
-}
 
 .brand-story-final-copy {
   position:absolute;
@@ -125,6 +101,10 @@ button {
   transform:translateY(118%);
   opacity:0;
   will-change:transform,opacity;
+}
+
+.brand-story-final-line.is-brand-color {
+  color:#ff6b6b;
 }
 
 .brand-story-final-bracket {
@@ -243,44 +223,6 @@ button {
   opacity:.58;
 }
 
-.brand-story-bottom-nav {
-  position:absolute;
-  left:50%;
-  bottom:26px;
-  transform:translateX(-50%);
-  display:flex;
-  gap:12px;
-  z-index:9;
-}
-
-.brand-story-nav-btn {
-  min-width:0;
-  width:auto;
-  flex:0 0 auto;
-  padding:8px 16px;
-  border:1px solid rgba(var(--coral-main-rgb),.52);
-  border-radius:20px;
-  background:rgba(26,26,26,.48);
-  color:rgba(var(--coral-light-rgb),.92);
-  font-family:"Noto Serif TC",serif;
-  font-size:var(--font-ui);
-  font-weight:400;
-  letter-spacing:.12em;
-  white-space:nowrap;
-  cursor:pointer;
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
-  transition:
-    background .25s ease,
-    box-shadow .25s ease,
-    border-color .25s ease;
-}
-
-.brand-story-nav-btn:hover {
-  background:rgba(var(--coral-main-rgb),.08);
-  border-color:rgba(var(--coral-main-rgb),.76);
-  box-shadow:0 0 18px rgba(var(--coral-main-rgb),.08);
-}
 
 /* 最終 Slogan 自動柔焦：［ ］框內保持清晰，框外兩層景深。 */
 #brandStorySection::before,
@@ -335,10 +277,6 @@ button {
 <section id="brandStorySection" aria-label="洸限品牌故事">
   <canvas id="brandStoryCanvas" aria-hidden="true"></canvas>
 
-  <button class="skip-anim-btn" id="brandStorySkipBtn" type="button">
-    Skip 略過動畫 ✕
-  </button>
-
   <div class="brand-story-final-copy" aria-label="品牌故事結語">
     <span class="brand-story-final-bracket brand-story-final-bracket-left" aria-hidden="true"></span>
     <span class="brand-story-final-mask">
@@ -354,11 +292,6 @@ button {
     <img class="brand-story-person" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAABQCAYAAAAOYsW+AAAACXBIWXMAAAsTAAALEwEAmpwYAAAGoGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4xLWMwMDIgNzkuYTFjZDEyZjQxLCAyMDI0LzExLzA4LTE2OjA5OjIwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjYuMiAoTWFjaW50b3NoKSIgeG1wOkNyZWF0ZURhdGU9IjIwMjYtMDgtMTNUMjE6Mjc6MjQrMDg6MDAiIHhtcDpNb2RpZnlEYXRlPSIyMDI2LTA4LTEzVDIxOjMwOjQ3KzA4OjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDI2LTA4LTEzVDIxOjMwOjQ3KzA4OjAwIiBkYzpmb3JtYXQ9ImltYWdlL3BuZyIgcGhvdG9zaG9wOkNvbG9yTW9kZT0iMyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo3Y2NmZWQ4NS1lMDY5LTQ0NzEtYjI0Ny1hNjYwZDNmNjVlYzIiIHhtcE1NOkRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDpiYjNiOTg0ZS05MzU2LTY1NDYtOTYyNy1jZmJjZDFhYTMxMTEiIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmNThkNmM0NS0yYzcyLTRlNzMtYWZkNy05MWQxYTlmZjhiNGMiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOmY1OGQ2YzQ1LTJjNzItNGU3My1hZmQ3LTkxZDFhOWZmOGI0YyIgc3RFdnQ6d2hlbj0iMjAyNi0wOC0xM1QyMToyNzoyNCswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjIgKE1hY2ludG9zaCkiLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjUyYzQzMWZkLTIxZjgtNDMzOS1hMDNkLTMyMzZkMGMzZmZjZCIgc3RFdnQ6d2hlbj0iMjAyNi0wOC0xM1QyMTozMDoxMyswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjIgKE1hY2ludG9zaCkiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjdjY2ZlZDg1LWUwNjktNDQ3MS1iMjQ3LWE2NjBkM2Y2NWVjMiIgc3RFdnQ6d2hlbj0iMjAyNi0wOC0xM1QyMTozMDo0NyswODowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjIgKE1hY2ludG9zaCkiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+InifsgAABGtJREFUaN61mmlIVUEUx18RRQsVhdUXI4giC9uwoKAiivYPqRG2olnRphHt0kortGoUFST6QYuIQmghtayQMtujRSxawDZtL/JL3dc5NYPHw7n3LXdm4A/vnbl3fnfmzj0z59wbcBwnEImCwSAqAVQGWqL+R6xAFOD8YONSAuoQMTjCE3YSoEN+fwV1sQVuD/pGoA6DL7QF7s96y+HbbYFxKOs9erzIFrgT6KcHOMMWuE+Iod5tc1Zf8+jxEJvgXkKvsWy0/RzPdQG/Ae0AtbUBrghxj7GcxmP/ebgG9+oLvM8DyuHTmF+PGhwXBpTCX5oY6kGguxGCg+qcpGjA3cijEw7Q7QLQtw8LF9wa9NYHlMOfhgteZQDK4WPCAd8wBPV0pwEHn7sGxYLxtwXwrVA9TjY4zHy4u3uBdxmGUvAkL3CZRfBmNzA6+M8WwBr+xA083sL95b2Ol8C7LUEpeJkEvm0RrOHnORjd5CdLjxH/34uCE4UI4TXohY9Fogh0R4g6RjoEvEG4ugJQrg9wKihTAO+hPb4kHJCq9lHRgjOFJwXLIw1uBfrIKmtATVQkGC0YezZBAOMa3S6gfCivLFEhyw8f4Cvq4quE0RyktzccvALUw8AOBNvfIoDH872yLu18ejJd+oKGC+1P5B4LS6W60hkGwHpF+sjA49A4jxmz1MHTDYB1BJnNGCloXM+MOs5d4nPRCKrURUDFVnRUK9BYzsAJ6uAsA+B81VZ3EltjKUVjHjGcIotGtoHt7WXSXgGfXF1B35XhrHCgH/BV0l4hAY/Wxmpi7KlsvdltiBSa55LG+AWKQWMMPcHBaK/hhNk+wDkEPIzNo3i918JyBHQAdIickOoDvJ+0gzmwC6ATqm4gDbpxuEfAWVNIj1N8gLcS8BxQGuikqg/wGLhYRxXKPtYD/CdM58G3zvP5nquneoRoQrSfC1jHwKVuWSD4kUg6EKNGNCPcwLyjR1LtKGiNR/ppsN9UxAOXxteRycfr8DbE+gUXuDS+gC15tO49qIVf8BqXxnFVa+ZSd99EnmuKS+PpoOYuifODJsBjXcDLVb0E3mQC3McFvEM9LnVCXbWplGKl0Pg2Bf4g1OWaAhcJw5npMuuDKgVpBHzOA7xPuM85psDPBLCeXCsFcKHNHo9UdWeEoT4e+k1b4zyXKDjwJgc7/x0ID/ikJdFXj18IPZ6l6t4LdWmmwFVCr3Q+448UlJkCVwhgDH2aChOrToW+RsB5AvgYqLMAvm3yZchiAVAkhLJY9poEjxIA5WpLU8u2rhNMguMEMO63Jgux7wCTYNx7fxHiaO5Y7tl44VXJIA9BF5mtygZ4j/BtwHJmK7MBTmaQHBa8h9zSRgvOZcNay95NYRlqA7xNmNkPSHKd5k8CRlYntUKhe3zF4DdZiuG6rffHxQRSQ9ZiXepVEG4cvIlAnoMOMzAOexsb4NMMlM5GYamNoW4JesfASeTbgY62vhFYK/jl1VF/3RTBwTPVNuexEi74U6MF/wUm/o+DKPdeMAAAAABJRU5ErkJggg==" alt="">
     <div class="brand-story-person-shadow"></div>
   </div>
-
-  <div class="brand-story-bottom-nav">
-    <button class="brand-story-nav-btn" id="brandStoryWallBtn" type="button">回・洸語牆</button>
-    <button class="brand-story-nav-btn" id="brandStoryHomeBtn" type="button">回・首頁</button>
-  </div>
 </section>
 
 <script>
@@ -366,7 +299,6 @@ button {
   "use strict";
 
   const page = document.getElementById("brandStorySection");
-  const skipBtn = document.getElementById("brandStorySkipBtn");
   const canvas = document.getElementById("brandStoryCanvas");
   const ctx = canvas.getContext("2d");
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -599,11 +531,6 @@ button {
       document.querySelector(".brand-story-person-wrap"),
       {opacity:"0"}
     );
-
-    setState(skipBtn,{
-      opacity:"1",
-      pointerEvents:"auto"
-    });
   }
 
   async function reveal(id,duration = 820) {
@@ -622,18 +549,33 @@ button {
     );
   }
 
+  async function hideElement(el,duration = 600) {
+    await animateTo(
+      el,
+      [
+        {transform:"translateY(0%)",opacity:1},
+        {transform:"translateY(-35%)",opacity:0}
+      ],
+      {duration,easing:"ease-in-out"}
+    );
+  }
+
   async function playAnimation() {
     resetAnimation();
     const thisRun = runId;
+    const final1 = document.getElementById("brandStoryFinal1");
+    const final2 = document.getElementById("brandStoryFinal2");
+    const brackets = [...document.querySelectorAll(".brand-story-final-bracket")];
 
-    await sleep(300);
-    if (thisRun !== runId) return;
-
+    /* 人物仍照原設定淡入；文字延後 2.5 秒才開始。 */
     animateTo(
       document.querySelector(".brand-story-person-wrap"),
       [{opacity:0},{opacity:1}],
       {duration:1200,easing:"ease-out"}
     );
+
+    await sleep(2500);
+    if (thisRun !== runId) return;
 
     await reveal("brandStoryFinal1",860);
     if (thisRun !== runId) return;
@@ -644,156 +586,71 @@ button {
     await sleep(1000);
 
     await Promise.all(
-      [...document.querySelectorAll(".brand-story-final-bracket")]
-        .map(el =>
-          animateTo(
-            el,
-            [
-              {
-                transform:"translateY(-50%) scaleY(.45)",
-                opacity:0
-              },
-              {
-                transform:"translateY(-50%) scaleY(1)",
-                opacity:1
-              }
-            ],
-            {
-              duration:620,
-              easing:"cubic-bezier(.22,1,.36,1)"
-            }
-          )
+      brackets.map(el =>
+        animateTo(
+          el,
+          [
+            {transform:"translateY(-50%) scaleY(.45)",opacity:0},
+            {transform:"translateY(-50%) scaleY(1)",opacity:1}
+          ],
+          {duration:620,easing:"cubic-bezier(.22,1,.36,1)"}
         )
+      )
     );
-
     if (thisRun !== runId) return;
 
     requestAnimationFrame(updateFocusBounds);
 
-    /* 最後兩行完成後 2 秒，自動開始聚焦。 */
-    await sleep(2000);
+    /* ［ ］完整出現後 0.5 秒，開始 2 秒聚焦。 */
+    await sleep(500);
     if (thisRun !== runId) return;
     page.classList.add("brand-story-focus-active");
 
-    /* 2 秒內慢慢模糊；完成後維持 2 秒。 */
+    /* 2 秒慢慢聚焦 + 完整聚焦停留 2 秒。 */
     await sleep(4000);
     if (thisRun !== runId) return;
     page.classList.remove("brand-story-focus-active");
 
-    /* 恢復同樣使用 2 秒 transition。 */
+    /* 2 秒慢慢恢復清晰。 */
     await sleep(2000);
     if (thisRun !== runId) return;
 
-    await animateTo(
-      skipBtn,
-      [{opacity:1},{opacity:0}],
-      {duration:400,easing:"ease"}
-    );
+    /* 聚焦完整結束後，清除 ［ ］ 與兩行結語。 */
+    await Promise.all([
+      hideElement(final1,600),
+      hideElement(final2,600),
+      ...brackets.map(el =>
+        animateTo(
+          el,
+          [
+            {transform:"translateY(-50%) scaleY(1)",opacity:1},
+            {transform:"translateY(-50%) scaleY(.78)",opacity:0}
+          ],
+          {duration:600,easing:"ease-in-out"}
+        )
+      )
+    ]);
+    if (thisRun !== runId) return;
 
-    setState(skipBtn,{pointerEvents:"none"});
+    /* 同一位置播放活動日期。 */
+    final2.style.display = "none";
+    final1.textContent = "9月1日";
+    final1.classList.add("is-brand-color");
+    setState(final1,{transform:"translateY(118%)",opacity:"0"});
+    await reveal("brandStoryFinal1",860);
+    if (thisRun !== runId) return;
+
+    /* 日期完整顯示 1.5 秒後清除。 */
+    await sleep(1500);
+    if (thisRun !== runId) return;
+    await hideElement(final1,600);
+    if (thisRun !== runId) return;
+
+    /* 同一位置播放活動名稱，並保留在畫面上。 */
+    final1.textContent = "拾洸記憶展";
+    setState(final1,{transform:"translateY(118%)",opacity:"0"});
+    await reveal("brandStoryFinal1",860);
   }
-
-  function skipAnimation() {
-    runId += 1;
-
-    document
-      .querySelectorAll(".brand-story-final-line")
-      .forEach(el =>
-        setState(el,{
-          transform:"translateY(0%)",
-          opacity:"1"
-        })
-      );
-
-    document
-      .querySelectorAll(".brand-story-final-bracket")
-      .forEach(el =>
-        setState(el,{
-          transform:"translateY(-50%) scaleY(1)",
-          opacity:"1"
-        })
-      );
-
-    setState(
-      document.querySelector(".brand-story-person-wrap"),
-      {opacity:"1"}
-    );
-
-    setState(skipBtn,{
-      opacity:"0",
-      pointerEvents:"none"
-    });
-
-    page.classList.remove("brand-story-focus-active");
-    requestAnimationFrame(updateFocusBounds);
-  }
-
-  /* ============================================================
-     最終 Slogan 自動柔焦
-     ============================================================ */
-  function updateFocusBounds() {
-    const finalCopy =
-      page.querySelector(".brand-story-final-copy");
-
-    const leftBracket =
-      finalCopy.querySelector(".brand-story-final-bracket-left");
-
-    const rightBracket =
-      finalCopy.querySelector(".brand-story-final-bracket-right");
-
-    const pageRect = page.getBoundingClientRect();
-    const leftRect = leftBracket.getBoundingClientRect();
-    const rightRect = rightBracket.getBoundingClientRect();
-
-    const focusLeft = leftRect.left;
-    const focusRight = rightRect.right;
-    const focusTop = Math.min(leftRect.top,rightRect.top);
-    const focusBottom = Math.max(leftRect.bottom,rightRect.bottom);
-
-    page.style.setProperty(
-      "--focus-left",
-      `${Math.max(0,focusLeft-pageRect.left)}px`
-    );
-
-    page.style.setProperty(
-      "--focus-top",
-      `${Math.max(0,focusTop-pageRect.top)}px`
-    );
-
-    page.style.setProperty(
-      "--focus-width",
-      `${Math.max(0,focusRight-focusLeft)}px`
-    );
-
-    page.style.setProperty(
-      "--focus-height",
-      `${Math.max(0,focusBottom-focusTop)}px`
-    );
-  }
-
-  /* ============================================================
-     Standalone controls
-     ------------------------------------------------------------
-     原網站兩顆底部按鈕會切回其他 section。
-     單頁抽出版沒有那些 section，因此：
-     - 回・首頁：重新播放本頁
-     - 回・洸語牆：直接回到本頁初始狀態並重新播放
-     外觀與 Hover 完整保留。
-     ============================================================ */
-  function replay() {
-    page.classList.remove("brand-story-focus-active");
-    playAnimation();
-  }
-
-  skipBtn.addEventListener("click",skipAnimation);
-
-  document
-    .getElementById("brandStoryHomeBtn")
-    .addEventListener("click",replay);
-
-  document
-    .getElementById("brandStoryWallBtn")
-    .addEventListener("click",replay);
 
   window.addEventListener("resize",() => {
     resizeCanvas();
