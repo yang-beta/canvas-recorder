@@ -202,7 +202,7 @@
   function drawPerson(scale) {
     const img = document.querySelector(".brand-story-person");
     const wrap = document.querySelector(".brand-story-person-wrap");
-    if (!img || !wrap || !img.complete || !img.naturalWidth) return;
+    if (!img || !wrap || !img.complete || !img.naturalWidth || !img.naturalHeight) return;
 
     const imgStyle = getComputedStyle(img);
     const wrapStyle = getComputedStyle(wrap);
@@ -212,8 +212,29 @@
 
     if (opacity <= .001) return;
 
-    const rect = rectToExport(img.getBoundingClientRect(),scale);
-    if (rect.width <= 0 || rect.height <= 0) return;
+    const domRect = img.getBoundingClientRect();
+    if (domRect.width <= 0 || domRect.height <= 0) return;
+
+    /*
+      重要：人物不能使用 sx / sy 分別拉伸寬高。
+      當瀏覽器視窗比例與 1920×1080 不完全一致時，sx !== sy，
+      直接 rectToExport() 會把人物左右壓扁或上下拉長。
+
+      這裡改成：
+      1. X / Y 位置仍依輸出畫布座標換算。
+      2. 人物寬度依網頁實際寬度換算。
+      3. 高度永遠由 PNG 原始長寬比計算。
+      4. 以人物腳底（bottom）為錨點，避免修正比例後人物上下飄移。
+    */
+    const exportX =
+      (domRect.left - scale.pageRect.left) * scale.sx;
+    const exportBottom =
+      (domRect.bottom - scale.pageRect.top) * scale.sy;
+
+    const exportWidth = domRect.width * scale.sx;
+    const imageRatio = img.naturalWidth / img.naturalHeight;
+    const exportHeight = exportWidth / imageRatio;
+    const exportY = exportBottom - exportHeight;
 
     sceneCtx.save();
     sceneCtx.globalAlpha = opacity;
@@ -222,7 +243,13 @@
     sceneCtx.filter =
       `brightness(0) drop-shadow(0 0 ${Math.max(1,2 * scale.sx)}px rgba(0,0,0,.60))`;
 
-    sceneCtx.drawImage(img,rect.x,rect.y,rect.width,rect.height);
+    sceneCtx.drawImage(
+      img,
+      exportX,
+      exportY,
+      exportWidth,
+      exportHeight
+    );
     sceneCtx.restore();
   }
 
@@ -243,59 +270,48 @@
     };
   }
 
-  function drawOutsideFocus(source,focus,alpha = 1) {
-    if (alpha <= .001) return;
-
-    exportCtx.save();
-    exportCtx.globalAlpha = alpha;
-
+  function clipOutsideFocus(ctx,focus) {
     const fx = clamp(focus.x,0,CONFIG.WIDTH);
     const fy = clamp(focus.y,0,CONFIG.HEIGHT);
     const fw = clamp(focus.width,0,CONFIG.WIDTH - fx);
     const fh = clamp(focus.height,0,CONFIG.HEIGHT - fy);
-    const right = fx + fw;
-    const bottom = fy + fh;
 
-    if (fy > 0) {
-      exportCtx.drawImage(source,0,0,CONFIG.WIDTH,fy,0,0,CONFIG.WIDTH,fy);
-    }
-    if (bottom < CONFIG.HEIGHT) {
-      exportCtx.drawImage(
-        source,0,bottom,CONFIG.WIDTH,CONFIG.HEIGHT - bottom,
-        0,bottom,CONFIG.WIDTH,CONFIG.HEIGHT - bottom
-      );
-    }
-    if (fx > 0 && fh > 0) {
-      exportCtx.drawImage(source,0,fy,fx,fh,0,fy,fx,fh);
-    }
-    if (right < CONFIG.WIDTH && fh > 0) {
-      exportCtx.drawImage(
-        source,right,fy,CONFIG.WIDTH - right,fh,
-        right,fy,CONFIG.WIDTH - right,fh
-      );
-    }
-
-    exportCtx.restore();
+    /*
+      用 even-odd 規則一次建立「全畫面扣掉中央焦點」的遮罩。
+      不再把上／下／左／右切成四個矩形分別貼回，
+      可避免焦點右側出現灰黑色矩形接縫。
+    */
+    ctx.beginPath();
+    ctx.rect(0,0,CONFIG.WIDTH,CONFIG.HEIGHT);
+    ctx.rect(fx,fy,fw,fh);
+    ctx.clip("evenodd");
   }
 
-  function fillOutsideFocus(focus,color,alpha) {
-    if (alpha <= .001) return;
+  function drawBlurLayer(focus,blurPx,overlayColor,opacity) {
+    if (opacity <= .001) return;
+
+    blurCtx.save();
+    blurCtx.globalAlpha = 1;
+    blurCtx.filter = "none";
+    blurCtx.fillStyle = "#1a1a1a";
+    blurCtx.fillRect(0,0,CONFIG.WIDTH,CONFIG.HEIGHT);
+
+    /*
+      先在完整尺寸的 offscreen canvas 上建立整張模糊畫面，
+      再由 exportCtx 的 inverse mask 決定哪些區域顯示。
+      如此不會因分段 drawImage 產生色塊或邊界。
+    */
+    blurCtx.filter = `blur(${blurPx}px)`;
+    blurCtx.drawImage(sceneCanvas,0,0,CONFIG.WIDTH,CONFIG.HEIGHT);
+    blurCtx.restore();
 
     exportCtx.save();
-    exportCtx.globalAlpha = alpha;
-    exportCtx.fillStyle = color;
-
-    const fx = clamp(focus.x,0,CONFIG.WIDTH);
-    const fy = clamp(focus.y,0,CONFIG.HEIGHT);
-    const fw = clamp(focus.width,0,CONFIG.WIDTH - fx);
-    const fh = clamp(focus.height,0,CONFIG.HEIGHT - fy);
-    const right = fx + fw;
-    const bottom = fy + fh;
-
-    exportCtx.fillRect(0,0,CONFIG.WIDTH,fy);
-    exportCtx.fillRect(0,bottom,CONFIG.WIDTH,CONFIG.HEIGHT - bottom);
-    exportCtx.fillRect(0,fy,fx,fh);
-    exportCtx.fillRect(right,fy,CONFIG.WIDTH - right,fh);
+    clipOutsideFocus(exportCtx,focus);
+    exportCtx.globalAlpha = opacity;
+    exportCtx.filter = "none";
+    exportCtx.drawImage(blurCanvas,0,0,CONFIG.WIDTH,CONFIG.HEIGHT);
+    exportCtx.fillStyle = overlayColor;
+    exportCtx.fillRect(0,0,CONFIG.WIDTH,CONFIG.HEIGHT);
     exportCtx.restore();
   }
 
@@ -313,23 +329,21 @@
     const focus = getFocusRect(scale);
 
     if (beforeOpacity > .001) {
-      blurCtx.save();
-      blurCtx.clearRect(0,0,CONFIG.WIDTH,CONFIG.HEIGHT);
-      blurCtx.filter = `blur(${2.4 * scale.sx}px)`;
-      blurCtx.drawImage(sceneCanvas,0,0);
-      blurCtx.restore();
-      drawOutsideFocus(blurCanvas,focus,beforeOpacity);
-      fillOutsideFocus(focus,"rgba(18,18,18,.025)",beforeOpacity);
+      drawBlurLayer(
+        focus,
+        2.4 * scale.sx,
+        "rgba(18,18,18,.025)",
+        beforeOpacity
+      );
     }
 
     if (afterOpacity > .001) {
-      blurCtx.save();
-      blurCtx.clearRect(0,0,CONFIG.WIDTH,CONFIG.HEIGHT);
-      blurCtx.filter = `blur(${6.8 * scale.sx}px)`;
-      blurCtx.drawImage(sceneCanvas,0,0);
-      blurCtx.restore();
-      drawOutsideFocus(blurCanvas,focus,afterOpacity);
-      fillOutsideFocus(focus,"rgba(18,18,18,.045)",afterOpacity);
+      drawBlurLayer(
+        focus,
+        6.8 * scale.sx,
+        "rgba(18,18,18,.045)",
+        afterOpacity
+      );
     }
   }
 
